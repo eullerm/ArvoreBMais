@@ -1,0 +1,3 @@
+C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/cardapio_pizza.dir
+C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/rebuild_cache.dir
