@@ -319,7 +319,7 @@ int busca_binaria(void *r,int *pos, int chave, int esq, int dir, int folha){
         if(dir >= esq){
             TNoFolha *raiz = r;
             if(raiz->pizzas[meio]->cod < chave){
-                return busca_binaria(raiz, pos, chave,meio+1, dir, folha);
+                return busca_binaria(raiz, pos, chave,meio + 1, dir, folha);
             }
             else if(raiz->pizzas[meio]->cod == chave){
                 *pos = meio;
@@ -329,18 +329,19 @@ int busca_binaria(void *r,int *pos, int chave, int esq, int dir, int folha){
         }
     }else{
         if(dir >= esq){
+            //printf("Noh interno: COD %d\n", chave);
+
             TNoInterno *raiz = r;
+            //imprime_no_interno(2, raiz);
             if(raiz->chaves[meio] < chave){
                 return busca_binaria(raiz, pos, chave,meio+1, dir, folha);
-            }
-            else if(raiz->chaves[meio] == chave && raiz->aponta_folha){
-                *pos = raiz->p[meio + 1];
+            }else if(raiz->chaves[meio] == chave && raiz->aponta_folha){
+                //printf("oi porra desgraça\n");
+                *pos = meio;
                 return chave;
-            }
-            return busca_binaria(raiz, pos, chave, esq, meio - 1, folha);
+            }return busca_binaria(raiz, pos, chave, esq, meio - 1, folha);
         }
-    }
-    return -1;
+    }return -1;
 }
 
 int busca(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, char *nome_arquivo_dados, int d)
@@ -488,20 +489,94 @@ TNoFolha *retira_pizza(TNoFolha *no, int pos){
     return no;
 }
 
-void redistribui(TNoInterno *p, TNoInterno *q, TNoInterno *w, int cod, int pos, int dir){
-    p = retira_pizza(p, pos);
-    if(dir > 0){
-
-    }else{
-
-    }
+void redistribui_dir(TNoFolha *dir, TNoFolha *esq, TNoInterno *pai){
+    esq->pizzas[esq->m] = dir->pizzas[0];//passei do irmao da direita pro da esquerda;
+    int cod = esq->pizzas[esq->m]->cod;
+    dir = retira_pizza(dir, 0);//retirei o valor da direita e mantive salvo em cod
+    int pos = 0;
+    int ind = 0;
+    ind = busca_binaria(pai, &pos, cod, 0, pai->m-1, 0);//achei a posição do pai que tem os filhos
+    pai->chaves[pos] = dir->pizzas[0]->cod;//atualizei o indice
+    esq->m++;
 }
 
-int irmao(FILE *dados, TNoFolha *a, TNoFolha *b){
+TNoFolha *shift(TNoFolha *no,int cod){
+    int i;
+    for(i = no->m; i>0; i--){
+        no->pizzas[i] = no->pizzas[i-1];
+    }
+    return no;
+}
 
+void redistribui_esq(TNoFolha *dir, TNoFolha *esq, TNoInterno *pai){
+    int cod = esq->pizzas[esq->m-1]->cod;
+    dir = shift(dir, cod);
+    dir->pizzas[0] = esq->pizzas[esq->m-1];
+    int pos = 0;
+    busca_binaria(pai, &pos, cod, 0, pai->m-1, 0);//achei a posição do pai que tem os filhos
+    pai->chaves[pos] = cod;//atualizei o indice
+}
+
+TNoFolha * get_irmao_op(int d,FILE *dados,TNoInterno *pai, TNoFolha *no, int pos, int *op, int *index){//retorna a posicao do irmao e a operação que será feita com ele
+    // op = -1 = redist com o irmao da direita. op = 0 = redist com o filho da esquerda. op = 1 = concatenação com o filho da direita.
+    int i = 0;
+    int p = 0;//indice dos filhos
+
+    if(pai){
+        for(i = 0; i <= pai->m; i++){
+            if(pai->p[i] == pos){
+                *index = p = i;
+                break;
+            }
+        }
+        if(p == 0){
+            fseek(dados, pai->p[p+1], SEEK_SET);
+            TNoFolha *dir = le_no_folha(d, dados);
+            if(dir){
+                if(no->m + dir->m < 2*d){
+                    *op = 1;
+                }
+                else{
+                    *op = -1;
+                }
+            }
+            return dir;
+        }else{
+            //carrego o no da direita e da esquerda TODO nao aguento mais
+            TNoFolha *dir;
+            TNoFolha *esq;
+            esq = dir = NULL;
+            fseek(dados, pai->p[p-1], SEEK_SET);
+            esq = le_no_folha(2, dados);
+            fseek(dados, pai->p[p+1], SEEK_SET);
+            dir = le_no_folha(2, dados);
+            //testo qual é o melhor e qual operacao
+            if(dir){
+                if(dir->m + no->m == 2*d){//redistribuição com o da direita
+                    *op = -1;
+                    return dir;
+                }else if(!esq){//concatenação
+                    *op = 1;
+                    return dir;
+                }
+            }else if(esq){
+                if(esq->m + no->m == 2*d){//redistribuição com o da esquerda
+                    *op = 0;
+                    return esq;
+                }else{
+                    *op = 1;
+                    return esq;
+                }
+            }
+        }
+    }
+    return NULL;
 }
 
 //int busca(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, char *nome_arquivo_dados, int d)
+
+//TNoFolha * get_irmao_op(int d,FILE *dados,TNoInterno *pai, TNoFolha *no, int pos, int *op)
+
 int exclui(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, char *nome_arquivo_dados, int d)
 {
 	//TODO: Inserir aqui o codigo do algoritmo de remocao
@@ -516,7 +591,6 @@ int exclui(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, cha
     int p = 0;
     busca_binaria(no, &p, cod, 0, no->m, 1);
 
-
     if(no->m > d || no->pont_pai == -1){//nao tem concatenacao nem redistribuicao
 
         no = retira_pizza(no, p);
@@ -527,20 +601,61 @@ int exclui(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, cha
 
     }else{//caso de haver redistribuição ou concatenação
 
-        fseek(dados, no->pont_prox, SEEK_SET);
-        TNoFolha *p = le_no_folha(2, dados);
-        TNoInterno * w = NULL;
-        if(p->pont_pai == no->pont_pai){
-            fseek(indice, no->pont_pai, SEEK_SET);
-            w = le_no_interno(2, indice);
-        }
-        TNoFolha *q = no;
+        fseek(indice, no->pont_pai, SEEK_SET);
+        TNoInterno *w = le_no_interno(d, indice);
+        if(!w)return -1;
+        int op = -2;
+        int index = 0;
+        no = retira_pizza(no, p);
+        TNoFolha *irmao = get_irmao_op(d, dados, w, no, pos, &op, &index);
+        fseek(dados, w->p[index], SEEK_SET);
+        //TNoFolha *q = le_no_folha(d, dados);
 
-        if(p->m + q->m >= 2*d){//redistribuição
-            //redistribui(p, q, w, cod);
-        }else{//concatenacao
-            //ahhhhhhh vai tomar no cuuuuuu
+        if(op == -1){
+            printf("\nantes\n");
+            imprime_no_interno(d, w);
+            imprime_no_folha(d, no);
+            imprime_no_folha(d, irmao);
+            redistribui_dir(irmao, no, w);
+            printf("depois\n");
+            imprime_no_interno(d, w);
+            imprime_no_folha(d, no);
+            imprime_no_folha(d, irmao);
+            printf("\n\n");
+            fseek(dados, pos, SEEK_SET);//vou gravar o noh p
+            salva_no_folha(d, no, dados);
+            fseek(dados, w->p[index], SEEK_SET);
+            salva_no_folha(d, irmao, dados);
+            fseek(indice, no->pont_pai, SEEK_SET);
+            salva_no_interno(d, w, indice);
+            fclose(indice);
+            fclose(dados);
         }
+        else if(op == 0){
+            printf("\nantes redist esq\n");
+            imprime_no_interno(d, w);
+            imprime_no_folha(d, no);
+            imprime_no_folha(d, irmao);
+            redistribui_esq(irmao, no, w);
+            printf("depois\n\n");
+            imprime_no_interno(d, w);
+            imprime_no_folha(d, no);
+            printf("\n\n");
+            imprime_no_folha(d, irmao);
+            fseek(dados, pos, SEEK_SET);//vou gravar o noh p
+            salva_no_folha(d, no, dados);
+            fseek(dados, w->p[index], SEEK_SET);
+            salva_no_folha(d, irmao, dados);
+            fseek(indice, no->pont_pai, SEEK_SET);
+            salva_no_interno(d, w, indice);
+            fclose(indice);
+            fclose(dados);
+
+        }
+        else{//concatena
+            printf("oi\n");
+        }
+
     }
     return pos;
 }
