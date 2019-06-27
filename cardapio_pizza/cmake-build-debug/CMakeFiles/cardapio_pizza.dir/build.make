@@ -42,10 +42,10 @@ RM = "C:\Program Files\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E 
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza
+CMAKE_SOURCE_DIR = C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\cmake-build-debug
+CMAKE_BINARY_DIR = C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/cardapio_pizza.dir/depend.make
@@ -59,128 +59,128 @@ include CMakeFiles/cardapio_pizza.dir/flags.make
 CMakeFiles/cardapio_pizza.dir/arvore_b_mais.c.obj: CMakeFiles/cardapio_pizza.dir/flags.make
 CMakeFiles/cardapio_pizza.dir/arvore_b_mais.c.obj: CMakeFiles/cardapio_pizza.dir/includes_C.rsp
 CMakeFiles/cardapio_pizza.dir/arvore_b_mais.c.obj: ../arvore_b_mais.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/cardapio_pizza.dir/arvore_b_mais.c.obj"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\cardapio_pizza.dir\arvore_b_mais.c.obj   -c C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\arvore_b_mais.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/cardapio_pizza.dir/arvore_b_mais.c.obj"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\cardapio_pizza.dir\arvore_b_mais.c.obj   -c C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\arvore_b_mais.c
 
 CMakeFiles/cardapio_pizza.dir/arvore_b_mais.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/cardapio_pizza.dir/arvore_b_mais.c.i"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\arvore_b_mais.c > CMakeFiles\cardapio_pizza.dir\arvore_b_mais.c.i
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\arvore_b_mais.c > CMakeFiles\cardapio_pizza.dir\arvore_b_mais.c.i
 
 CMakeFiles/cardapio_pizza.dir/arvore_b_mais.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/cardapio_pizza.dir/arvore_b_mais.c.s"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\arvore_b_mais.c -o CMakeFiles\cardapio_pizza.dir\arvore_b_mais.c.s
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\arvore_b_mais.c -o CMakeFiles\cardapio_pizza.dir\arvore_b_mais.c.s
 
 CMakeFiles/cardapio_pizza.dir/pizza.c.obj: CMakeFiles/cardapio_pizza.dir/flags.make
 CMakeFiles/cardapio_pizza.dir/pizza.c.obj: CMakeFiles/cardapio_pizza.dir/includes_C.rsp
 CMakeFiles/cardapio_pizza.dir/pizza.c.obj: ../pizza.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/cardapio_pizza.dir/pizza.c.obj"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\cardapio_pizza.dir\pizza.c.obj   -c C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\pizza.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/cardapio_pizza.dir/pizza.c.obj"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\cardapio_pizza.dir\pizza.c.obj   -c C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\pizza.c
 
 CMakeFiles/cardapio_pizza.dir/pizza.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/cardapio_pizza.dir/pizza.c.i"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\pizza.c > CMakeFiles\cardapio_pizza.dir\pizza.c.i
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\pizza.c > CMakeFiles\cardapio_pizza.dir\pizza.c.i
 
 CMakeFiles/cardapio_pizza.dir/pizza.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/cardapio_pizza.dir/pizza.c.s"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\pizza.c -o CMakeFiles\cardapio_pizza.dir\pizza.c.s
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\pizza.c -o CMakeFiles\cardapio_pizza.dir\pizza.c.s
 
 CMakeFiles/cardapio_pizza.dir/lista_pizzas.c.obj: CMakeFiles/cardapio_pizza.dir/flags.make
 CMakeFiles/cardapio_pizza.dir/lista_pizzas.c.obj: CMakeFiles/cardapio_pizza.dir/includes_C.rsp
 CMakeFiles/cardapio_pizza.dir/lista_pizzas.c.obj: ../lista_pizzas.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/cardapio_pizza.dir/lista_pizzas.c.obj"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\cardapio_pizza.dir\lista_pizzas.c.obj   -c C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\lista_pizzas.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/cardapio_pizza.dir/lista_pizzas.c.obj"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\cardapio_pizza.dir\lista_pizzas.c.obj   -c C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\lista_pizzas.c
 
 CMakeFiles/cardapio_pizza.dir/lista_pizzas.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/cardapio_pizza.dir/lista_pizzas.c.i"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\lista_pizzas.c > CMakeFiles\cardapio_pizza.dir\lista_pizzas.c.i
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\lista_pizzas.c > CMakeFiles\cardapio_pizza.dir\lista_pizzas.c.i
 
 CMakeFiles/cardapio_pizza.dir/lista_pizzas.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/cardapio_pizza.dir/lista_pizzas.c.s"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\lista_pizzas.c -o CMakeFiles\cardapio_pizza.dir\lista_pizzas.c.s
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\lista_pizzas.c -o CMakeFiles\cardapio_pizza.dir\lista_pizzas.c.s
 
 CMakeFiles/cardapio_pizza.dir/lista_nos_folhas.c.obj: CMakeFiles/cardapio_pizza.dir/flags.make
 CMakeFiles/cardapio_pizza.dir/lista_nos_folhas.c.obj: CMakeFiles/cardapio_pizza.dir/includes_C.rsp
 CMakeFiles/cardapio_pizza.dir/lista_nos_folhas.c.obj: ../lista_nos_folhas.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/cardapio_pizza.dir/lista_nos_folhas.c.obj"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\cardapio_pizza.dir\lista_nos_folhas.c.obj   -c C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\lista_nos_folhas.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/cardapio_pizza.dir/lista_nos_folhas.c.obj"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\cardapio_pizza.dir\lista_nos_folhas.c.obj   -c C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\lista_nos_folhas.c
 
 CMakeFiles/cardapio_pizza.dir/lista_nos_folhas.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/cardapio_pizza.dir/lista_nos_folhas.c.i"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\lista_nos_folhas.c > CMakeFiles\cardapio_pizza.dir\lista_nos_folhas.c.i
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\lista_nos_folhas.c > CMakeFiles\cardapio_pizza.dir\lista_nos_folhas.c.i
 
 CMakeFiles/cardapio_pizza.dir/lista_nos_folhas.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/cardapio_pizza.dir/lista_nos_folhas.c.s"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\lista_nos_folhas.c -o CMakeFiles\cardapio_pizza.dir\lista_nos_folhas.c.s
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\lista_nos_folhas.c -o CMakeFiles\cardapio_pizza.dir\lista_nos_folhas.c.s
 
 CMakeFiles/cardapio_pizza.dir/lista_nos_internos.c.obj: CMakeFiles/cardapio_pizza.dir/flags.make
 CMakeFiles/cardapio_pizza.dir/lista_nos_internos.c.obj: CMakeFiles/cardapio_pizza.dir/includes_C.rsp
 CMakeFiles/cardapio_pizza.dir/lista_nos_internos.c.obj: ../lista_nos_internos.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/cardapio_pizza.dir/lista_nos_internos.c.obj"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\cardapio_pizza.dir\lista_nos_internos.c.obj   -c C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\lista_nos_internos.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/cardapio_pizza.dir/lista_nos_internos.c.obj"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\cardapio_pizza.dir\lista_nos_internos.c.obj   -c C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\lista_nos_internos.c
 
 CMakeFiles/cardapio_pizza.dir/lista_nos_internos.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/cardapio_pizza.dir/lista_nos_internos.c.i"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\lista_nos_internos.c > CMakeFiles\cardapio_pizza.dir\lista_nos_internos.c.i
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\lista_nos_internos.c > CMakeFiles\cardapio_pizza.dir\lista_nos_internos.c.i
 
 CMakeFiles/cardapio_pizza.dir/lista_nos_internos.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/cardapio_pizza.dir/lista_nos_internos.c.s"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\lista_nos_internos.c -o CMakeFiles\cardapio_pizza.dir\lista_nos_internos.c.s
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\lista_nos_internos.c -o CMakeFiles\cardapio_pizza.dir\lista_nos_internos.c.s
 
 CMakeFiles/cardapio_pizza.dir/metadados.c.obj: CMakeFiles/cardapio_pizza.dir/flags.make
 CMakeFiles/cardapio_pizza.dir/metadados.c.obj: CMakeFiles/cardapio_pizza.dir/includes_C.rsp
 CMakeFiles/cardapio_pizza.dir/metadados.c.obj: ../metadados.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/cardapio_pizza.dir/metadados.c.obj"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\cardapio_pizza.dir\metadados.c.obj   -c C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\metadados.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/cardapio_pizza.dir/metadados.c.obj"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\cardapio_pizza.dir\metadados.c.obj   -c C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\metadados.c
 
 CMakeFiles/cardapio_pizza.dir/metadados.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/cardapio_pizza.dir/metadados.c.i"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\metadados.c > CMakeFiles\cardapio_pizza.dir\metadados.c.i
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\metadados.c > CMakeFiles\cardapio_pizza.dir\metadados.c.i
 
 CMakeFiles/cardapio_pizza.dir/metadados.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/cardapio_pizza.dir/metadados.c.s"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\metadados.c -o CMakeFiles\cardapio_pizza.dir\metadados.c.s
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\metadados.c -o CMakeFiles\cardapio_pizza.dir\metadados.c.s
 
 CMakeFiles/cardapio_pizza.dir/no_folha.c.obj: CMakeFiles/cardapio_pizza.dir/flags.make
 CMakeFiles/cardapio_pizza.dir/no_folha.c.obj: CMakeFiles/cardapio_pizza.dir/includes_C.rsp
 CMakeFiles/cardapio_pizza.dir/no_folha.c.obj: ../no_folha.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/cardapio_pizza.dir/no_folha.c.obj"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\cardapio_pizza.dir\no_folha.c.obj   -c C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\no_folha.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/cardapio_pizza.dir/no_folha.c.obj"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\cardapio_pizza.dir\no_folha.c.obj   -c C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\no_folha.c
 
 CMakeFiles/cardapio_pizza.dir/no_folha.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/cardapio_pizza.dir/no_folha.c.i"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\no_folha.c > CMakeFiles\cardapio_pizza.dir\no_folha.c.i
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\no_folha.c > CMakeFiles\cardapio_pizza.dir\no_folha.c.i
 
 CMakeFiles/cardapio_pizza.dir/no_folha.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/cardapio_pizza.dir/no_folha.c.s"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\no_folha.c -o CMakeFiles\cardapio_pizza.dir\no_folha.c.s
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\no_folha.c -o CMakeFiles\cardapio_pizza.dir\no_folha.c.s
 
 CMakeFiles/cardapio_pizza.dir/no_interno.c.obj: CMakeFiles/cardapio_pizza.dir/flags.make
 CMakeFiles/cardapio_pizza.dir/no_interno.c.obj: CMakeFiles/cardapio_pizza.dir/includes_C.rsp
 CMakeFiles/cardapio_pizza.dir/no_interno.c.obj: ../no_interno.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/cardapio_pizza.dir/no_interno.c.obj"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\cardapio_pizza.dir\no_interno.c.obj   -c C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\no_interno.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/cardapio_pizza.dir/no_interno.c.obj"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\cardapio_pizza.dir\no_interno.c.obj   -c C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\no_interno.c
 
 CMakeFiles/cardapio_pizza.dir/no_interno.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/cardapio_pizza.dir/no_interno.c.i"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\no_interno.c > CMakeFiles\cardapio_pizza.dir\no_interno.c.i
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\no_interno.c > CMakeFiles\cardapio_pizza.dir\no_interno.c.i
 
 CMakeFiles/cardapio_pizza.dir/no_interno.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/cardapio_pizza.dir/no_interno.c.s"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\no_interno.c -o CMakeFiles\cardapio_pizza.dir\no_interno.c.s
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\no_interno.c -o CMakeFiles\cardapio_pizza.dir\no_interno.c.s
 
 CMakeFiles/cardapio_pizza.dir/test_arvore_b_mais.c.obj: CMakeFiles/cardapio_pizza.dir/flags.make
 CMakeFiles/cardapio_pizza.dir/test_arvore_b_mais.c.obj: CMakeFiles/cardapio_pizza.dir/includes_C.rsp
 CMakeFiles/cardapio_pizza.dir/test_arvore_b_mais.c.obj: ../test_arvore_b_mais.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/cardapio_pizza.dir/test_arvore_b_mais.c.obj"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\cardapio_pizza.dir\test_arvore_b_mais.c.obj   -c C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\test_arvore_b_mais.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/cardapio_pizza.dir/test_arvore_b_mais.c.obj"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\cardapio_pizza.dir\test_arvore_b_mais.c.obj   -c C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\test_arvore_b_mais.c
 
 CMakeFiles/cardapio_pizza.dir/test_arvore_b_mais.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/cardapio_pizza.dir/test_arvore_b_mais.c.i"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\test_arvore_b_mais.c > CMakeFiles\cardapio_pizza.dir\test_arvore_b_mais.c.i
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\test_arvore_b_mais.c > CMakeFiles\cardapio_pizza.dir\test_arvore_b_mais.c.i
 
 CMakeFiles/cardapio_pizza.dir/test_arvore_b_mais.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/cardapio_pizza.dir/test_arvore_b_mais.c.s"
-	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\test_arvore_b_mais.c -o CMakeFiles\cardapio_pizza.dir\test_arvore_b_mais.c.s
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\test_arvore_b_mais.c -o CMakeFiles\cardapio_pizza.dir\test_arvore_b_mais.c.s
 
 # Object files for target cardapio_pizza
 cardapio_pizza_OBJECTS = \
@@ -210,7 +210,7 @@ cardapio_pizza.exe: CMakeFiles/cardapio_pizza.dir/build.make
 cardapio_pizza.exe: CMakeFiles/cardapio_pizza.dir/linklibs.rsp
 cardapio_pizza.exe: CMakeFiles/cardapio_pizza.dir/objects1.rsp
 cardapio_pizza.exe: CMakeFiles/cardapio_pizza.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking C executable cardapio_pizza.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking C executable cardapio_pizza.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\cardapio_pizza.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -223,6 +223,6 @@ CMakeFiles/cardapio_pizza.dir/clean:
 .PHONY : CMakeFiles/cardapio_pizza.dir/clean
 
 CMakeFiles/cardapio_pizza.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\cmake-build-debug C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\cmake-build-debug C:\Users\eulle\Desktop\AvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles\cardapio_pizza.dir\DependInfo.cmake --color=$(COLOR)
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\cmake-build-debug C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\cmake-build-debug C:\Users\eulle\Documents\GitHub\ArvoreBMais\cardapio_pizza\cmake-build-debug\CMakeFiles\cardapio_pizza.dir\DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/cardapio_pizza.dir/depend
 

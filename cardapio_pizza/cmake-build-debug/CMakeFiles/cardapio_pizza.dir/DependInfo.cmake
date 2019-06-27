@@ -4,15 +4,15 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/arvore_b_mais.c" "C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/arvore_b_mais.c.obj"
-  "C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/lista_nos_folhas.c" "C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/lista_nos_folhas.c.obj"
-  "C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/lista_nos_internos.c" "C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/lista_nos_internos.c.obj"
-  "C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/lista_pizzas.c" "C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/lista_pizzas.c.obj"
-  "C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/metadados.c" "C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/metadados.c.obj"
-  "C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/no_folha.c" "C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/no_folha.c.obj"
-  "C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/no_interno.c" "C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/no_interno.c.obj"
-  "C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/pizza.c" "C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/pizza.c.obj"
-  "C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/test_arvore_b_mais.c" "C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/test_arvore_b_mais.c.obj"
+  "C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/arvore_b_mais.c" "C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/arvore_b_mais.c.obj"
+  "C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/lista_nos_folhas.c" "C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/lista_nos_folhas.c.obj"
+  "C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/lista_nos_internos.c" "C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/lista_nos_internos.c.obj"
+  "C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/lista_pizzas.c" "C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/lista_pizzas.c.obj"
+  "C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/metadados.c" "C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/metadados.c.obj"
+  "C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/no_folha.c" "C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/no_folha.c.obj"
+  "C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/no_interno.c" "C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/no_interno.c.obj"
+  "C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/pizza.c" "C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/pizza.c.obj"
+  "C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/test_arvore_b_mais.c" "C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/test_arvore_b_mais.c.obj"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/arvore_b_mais.c
+C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/arvore_b_mais.c
 limits.h
 -
 stdlib.h
@@ -14,41 +14,41 @@ stdlib.h
 mem.h
 -
 arvore_b_mais.h
-C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/arvore_b_mais.h
+C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/arvore_b_mais.h
 lista_pizzas.h
-C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/lista_pizzas.h
+C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/lista_pizzas.h
 metadados.h
-C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/metadados.h
+C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/metadados.h
 no_folha.h
-C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/no_folha.h
+C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/no_folha.h
 lista_nos_internos.h
-C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/lista_nos_internos.h
+C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/lista_nos_internos.h
 
-C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/arvore_b_mais.h
+C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/arvore_b_mais.h
 
-C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/lista_nos_internos.h
+C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/lista_nos_internos.h
 no_interno.h
-C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/no_interno.h
+C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/no_interno.h
 
-C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/lista_pizzas.h
+C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/lista_pizzas.h
 pizza.h
-C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/pizza.h
+C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/pizza.h
 
-C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/metadados.h
+C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/metadados.h
 stdio.h
 -
 
-C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/no_folha.h
+C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/no_folha.h
 stdio.h
 -
 pizza.h
-C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/pizza.h
+C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/pizza.h
 
-C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/no_interno.h
+C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/no_interno.h
 stdio.h
 -
 
-C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/pizza.h
+C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/pizza.h
 stdio.h
 -
 

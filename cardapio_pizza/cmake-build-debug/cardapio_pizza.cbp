@@ -8,23 +8,23 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug"/>
+				<Option working_dir="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="cardapio_pizza">
-				<Option output="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/cardapio_pizza.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug"/>
+				<Option output="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/cardapio_pizza.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/."/>
+					<Add directory="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/."/>
 					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include/c++"/>
 					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include/c++/mingw32"/>
 					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include/c++/backward"/>
@@ -33,20 +33,20 @@
 					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include-fixed"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 cardapio_pizza"/>
-					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 cardapio_pizza"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="cardapio_pizza/fast">
-				<Option output="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/cardapio_pizza.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug"/>
+				<Option output="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/cardapio_pizza.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/."/>
+					<Add directory="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/."/>
 					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include/c++"/>
 					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include/c++/mingw32"/>
 					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include/c++/backward"/>
@@ -55,91 +55,91 @@
 					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/6.3.0/include-fixed"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 cardapio_pizza/fast"/>
-					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 cardapio_pizza/fast"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug"/>
+				<Option working_dir="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug"/>
+				<Option working_dir="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/Makefile">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/Makefile">
 			<Option target="cardapio_pizza"/>
 		</Unit>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/arvore_b_mais.c">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/arvore_b_mais.c">
 			<Option target="cardapio_pizza"/>
 		</Unit>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/arvore_b_mais.h">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/arvore_b_mais.h">
 			<Option target="cardapio_pizza"/>
 		</Unit>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/lista_nos_folhas.c">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/lista_nos_folhas.c">
 			<Option target="cardapio_pizza"/>
 		</Unit>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/lista_nos_folhas.h">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/lista_nos_folhas.h">
 			<Option target="cardapio_pizza"/>
 		</Unit>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/lista_nos_internos.c">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/lista_nos_internos.c">
 			<Option target="cardapio_pizza"/>
 		</Unit>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/lista_nos_internos.h">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/lista_nos_internos.h">
 			<Option target="cardapio_pizza"/>
 		</Unit>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/lista_pizzas.c">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/lista_pizzas.c">
 			<Option target="cardapio_pizza"/>
 		</Unit>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/lista_pizzas.h">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/lista_pizzas.h">
 			<Option target="cardapio_pizza"/>
 		</Unit>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/metadados.c">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/metadados.c">
 			<Option target="cardapio_pizza"/>
 		</Unit>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/metadados.h">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/metadados.h">
 			<Option target="cardapio_pizza"/>
 		</Unit>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/no_folha.c">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/no_folha.c">
 			<Option target="cardapio_pizza"/>
 		</Unit>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/no_folha.h">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/no_folha.h">
 			<Option target="cardapio_pizza"/>
 		</Unit>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/no_interno.c">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/no_interno.c">
 			<Option target="cardapio_pizza"/>
 		</Unit>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/no_interno.h">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/no_interno.h">
 			<Option target="cardapio_pizza"/>
 		</Unit>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/pizza.c">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/pizza.c">
 			<Option target="cardapio_pizza"/>
 		</Unit>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/pizza.h">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/pizza.h">
 			<Option target="cardapio_pizza"/>
 		</Unit>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/test_arvore_b_mais.c">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/test_arvore_b_mais.c">
 			<Option target="cardapio_pizza"/>
 		</Unit>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/ufftest.h">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/ufftest.h">
 			<Option target="cardapio_pizza"/>
 		</Unit>
-		<Unit filename="C:/Users/eulle/Desktop/AvoreBMais/cardapio_pizza/CMakeLists.txt">
+		<Unit filename="C:/Users/eulle/Documents/GitHub/ArvoreBMais/cardapio_pizza/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>
