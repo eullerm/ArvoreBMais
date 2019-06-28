@@ -1,17 +1,20 @@
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
 #endif
-
+#define DIR 1
+#define  ESQ 0
 #include <limits.h>
 #include <stdlib.h>
+#include <mem.h>
 
 #include "arvore_b_mais.h"
 #include "lista_pizzas.h"
 #include "metadados.h"
-#include "no_interno.h"
 #include "no_folha.h"
+#include "lista_nos_internos.h"
 
 
+//Preenche o arquivo metadados se ele estiver vazio.
 void checaMetadados(char *nome_arquivo_metadados, int d){
 
     TMetadados *metadados1 = le_arq_metadados(nome_arquivo_metadados);
@@ -23,6 +26,7 @@ void checaMetadados(char *nome_arquivo_metadados, int d){
 
 }
 
+//Insere um no interno
 void insereNoInterno(int cod, int d, char *nome_arquivo_indice, FILE *arq_Dados ,TMetadados *metadados, int pos){
 
     FILE *arq_Indices = fopen(nome_arquivo_indice, "rb+");
@@ -126,6 +130,7 @@ void insereNoInterno(int cod, int d, char *nome_arquivo_indice, FILE *arq_Dados 
             novo2->p[k2] = guardaP[k2 + meio + 1];
             novo2->m++;
         }
+
         if(novo2->aponta_folha) { //Para alterar o pai
             fseek(arq_Dados, novo2->p[k2], SEEK_SET);
             mudaP = le_no_folha(d, arq_Dados);
@@ -185,6 +190,7 @@ void insereNoInterno(int cod, int d, char *nome_arquivo_indice, FILE *arq_Dados 
 
 }
 
+//Insere um no folha
 void insereNoFolha(TNoFolha *no, int cod, TPizza *p, int d, FILE *arq_Dados, TMetadados *metadados, int pos, char *nome_arquivo_indice){
 
     if(no->m < 2*d) {//Caso caiba
@@ -288,6 +294,7 @@ void insereNoFolha(TNoFolha *no, int cod, TPizza *p, int d, FILE *arq_Dados, TMe
             novoPai->aponta_folha = 1;
 
             FILE *arq_Indices = fopen(nome_arquivo_indice, "rb+");
+            fseek(arq_Indices, metadados->pont_prox_no_interno_livre, SEEK_SET);
             salva_no_interno(d, novoPai, arq_Indices);
             metadados->pont_prox_no_interno_livre = ftell(arq_Indices);//Passa a apontar para o final do arquivo.
             fclose(arq_Indices);
@@ -344,9 +351,24 @@ int busca_binaria(void *r,int *pos, int chave, int esq, int dir, int folha){
     }return -1;
 }
 
+//Verifica se o codigo já existe
+int buscaFolha(int pos, char *nome_arquivo_dados, int cod, int d){
+
+    FILE *arq_Dados = fopen(nome_arquivo_dados, "rb");
+    fseek(arq_Dados, pos, SEEK_SET);
+    TNoFolha *noFolha = le_no_folha(d, arq_Dados);
+    int x = 0;
+    if(noFolha){
+        int p = busca_binaria(noFolha, &x, cod, 0, noFolha->m-1, 1);
+        if(p == -1) return 0;
+        else return 1;
+    }
+    return 0;
+}
+
 int busca(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, char *nome_arquivo_dados, int d)
 {
-	//TODO: Inserir aqui o codigo do algoritmo
+    //TODO: Inserir aqui o codigo do algoritmo
     TMetadados * metadados = le_arq_metadados(nome_arquivo_metadados);
     TNoFolha *raizF = NULL;
     TNoInterno *raizI = NULL;
@@ -367,8 +389,11 @@ int busca(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, char
     if(!metadados)return -1;
 
     else{
-        if(metadados->raiz_folha)raizF = le_no_folha(d, dados);
-        else raizI = le_no_interno(d, indices);
+        if(metadados->raiz_folha)return metadados->pont_raiz;
+        else{
+            fseek(indices, metadados->pont_raiz, SEEK_SET);
+            raizI = le_no_interno(d, indices);
+        }
     }
 
     if(!raizI && !raizF)return -1;
@@ -381,9 +406,9 @@ int busca(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, char
         pos = 0;
         value = busca_binaria(raizI, &pos, cod, 0, raizI->m-1, 0);
         //imprime_no_interno(2, raizI);
-        int i = pos;
+
         if(value != cod && raizI->p[0] != -1){//se o elemento não está no nó e ele é interno
-            if(raizI->chaves[i] > cod){
+            if(raizI->chaves[pos] > cod){
                 p_no = raizI->p[pos];
                 if(raizI->aponta_folha)break;
                 fseek(indices, p_no, SEEK_SET);
@@ -394,27 +419,12 @@ int busca(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, char
                 fseek(indices, p_no, SEEK_SET);
                 raizI = le_no_interno(d, indices);
             }
-        }else{
-
+        }else{//se o indice for igual a chave, eu tenho q carregar a folha
+            fseek(indices, pos, SEEK_SET);
+            raizI = le_no_interno(d, indices);
         }
     }
     return p_no;
-}
-//int busca_binaria(void *r,int *pos, int chave, int esq, int dir, int folha)
-//retorna o elemento e a posição dele
-
-int buscaFolha(int pos, char *nome_arquivo_dados, int cod, int d){
-
-    FILE *arq_Dados = fopen(nome_arquivo_dados, "rb");
-    fseek(arq_Dados, pos, SEEK_SET);
-    TNoFolha *noFolha = le_no_folha(d, arq_Dados);
-    int x = 0;
-    if(noFolha){
-        int p = busca_binaria(noFolha, &x, cod, 0, noFolha->m-1, 1);
-        if(p == -1) return 0;
-        else return 1;
-    }
-    return 0;
 }
 
 int insere(int cod, char *nome, char *categoria, float preco, char *nome_arquivo_metadados, char *nome_arquivo_indice, char *nome_arquivo_dados, int d)
@@ -449,8 +459,8 @@ int insere(int cod, char *nome, char *categoria, float preco, char *nome_arquivo
         //imprime_metadados(metadados);
 
         salva_arq_metadados(nome_arquivo_metadados, metadados);
-
-        /*rewind(arq_Dados);
+/*
+        rewind(arq_Dados);
         noFolha = le_no_folha(d, arq_Dados);
         while(noFolha){
             imprime_no_folha(d, noFolha);
@@ -459,14 +469,15 @@ int insere(int cod, char *nome, char *categoria, float preco, char *nome_arquivo
 
         fclose(arq_Dados);
 
-
-        /*FILE *arqIndices = fopen(nome_arquivo_indice, "rb+");
+/*
+        FILE *arqIndices = fopen(nome_arquivo_indice, "rb+");
         TNoInterno * no = le_no_interno(d, arqIndices);
         while(no) {
             imprime_no_interno(d, no);
             no = le_no_interno(d, arqIndices);
-        }*/
-
+        }
+        fclose(arqIndices);
+*/
         pos = busca(cod, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d);
 
         return pos;
@@ -477,6 +488,7 @@ int insere(int cod, char *nome, char *categoria, float preco, char *nome_arquivo
 
 }
 
+//Remove uma pizza do no folha
 TNoFolha *retira_pizza(TNoFolha *no, int pos){
     int i;
     for(i = pos; i < no->m - 1; i++){
@@ -489,6 +501,7 @@ TNoFolha *retira_pizza(TNoFolha *no, int pos){
     return no;
 }
 
+//Redistribui o irmão da direita com o da esquerda
 void redistribui_dir(TNoFolha *dir, TNoFolha *esq, TNoInterno *pai){
     esq->pizzas[esq->m] = dir->pizzas[0];//passei do irmao da direita pro da esquerda;
     int cod = esq->pizzas[esq->m]->cod;
@@ -500,7 +513,8 @@ void redistribui_dir(TNoFolha *dir, TNoFolha *esq, TNoInterno *pai){
     esq->m++;
 }
 
-TNoFolha *shift(TNoFolha *no,int cod){
+//Move as pizzas
+TNoFolha *shift(TNoFolha *no){
     int i;
     for(i = no->m; i>0; i--){
         no->pizzas[i] = no->pizzas[i-1];
@@ -508,15 +522,17 @@ TNoFolha *shift(TNoFolha *no,int cod){
     return no;
 }
 
+//Redistribui o irmão da esquerda pro da direita
 void redistribui_esq(TNoFolha *dir, TNoFolha *esq, TNoInterno *pai){
     int cod = esq->pizzas[esq->m-1]->cod;
-    dir = shift(dir, cod);
+    dir = shift(dir);
     dir->pizzas[0] = esq->pizzas[esq->m-1];
     int pos = 0;
     busca_binaria(pai, &pos, cod, 0, pai->m-1, 0);//achei a posição do pai que tem os filhos
     pai->chaves[pos] = cod;//atualizei o indice
 }
 
+//Retorna o irmão
 TNoFolha * get_irmao_op(int d,FILE *dados,TNoInterno *pai, TNoFolha *no, int pos, int *op, int *index){//retorna a posicao do irmao e a operação que será feita com ele
     // op = -1 = redist com o irmao da direita. op = 0 = redist com o filho da esquerda. op = 1 = concatenação com o filho da direita.
     int i = 0;
@@ -573,94 +589,380 @@ TNoFolha * get_irmao_op(int d,FILE *dados,TNoInterno *pai, TNoFolha *no, int pos
     return NULL;
 }
 
-//int busca(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, char *nome_arquivo_dados, int d)
+//Exclui todas pizzas de uma categoria
+void excluiCategoria(char *categoria, char *nome_arquivo_dados, char *nome_arquivo_indice, char *nome_arquivo_metadados, int d){
 
-//TNoFolha * get_irmao_op(int d,FILE *dados,TNoInterno *pai, TNoFolha *no, int pos, int *op)
+    FILE *arq_Dados = fopen(nome_arquivo_dados, "rb");
+
+    TNoFolha *noFolha = le_no_folha(d, arq_Dados);
+
+    int i =0;
+
+    while(noFolha){
+
+        if(i < noFolha->m){
+            if(strcmp(noFolha->pizzas[i]->categoria, categoria) == 0){
+                exclui(noFolha->pizzas[i]->cod, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d);
+            }i++;
+        }else{
+            noFolha = le_no_folha(d, arq_Dados);
+            i = 0;
+        }
+    }
+    fclose(arq_Dados);
+
+}
+
+void concatena(TNoFolha *no, TNoFolha *irmao, TNoInterno *pai, int d, int op){
+    if(op == DIR) {
+        for (int i = (no->m - 1); i < 0; i++){
+            irmao = shift(irmao);
+            irmao->pizzas[0] = no->pizzas[i];
+            irmao->m++;
+
+        }
+
+
+    }
+}
 
 int exclui(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, char *nome_arquivo_dados, int d)
 {
-	//TODO: Inserir aqui o codigo do algoritmo de remocao
+    int pos = busca(cod, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d);
 
-	int pos = busca(cod, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d);
-    FILE * dados = fopen(nome_arquivo_dados, "rb+");
-    if(!dados)return -1;
-    FILE *indice = fopen(nome_arquivo_indice, "rb+");
-    fseek(dados, pos, SEEK_SET);
-    TNoFolha * no = le_no_folha(d, dados);
-    //imprime_no_folha(d, no);
-    int p = 0;
-    busca_binaria(no, &p, cod, 0, no->m, 1);
+    if(buscaFolha(pos, nome_arquivo_dados, cod, d)){
+        FILE * dados = fopen(nome_arquivo_dados, "rb+");
 
-    if(no->m > d || no->pont_pai == -1){//nao tem concatenacao nem redistribuicao
-
-        no = retira_pizza(no, p);
-        //imprime_no_folha(d, no);
+        if(!dados)return -1;
+        FILE *indice = fopen(nome_arquivo_indice, "rb+");
         fseek(dados, pos, SEEK_SET);
-        salva_no_folha(d, no, dados);
-        fclose(dados);
+        TNoFolha * no = le_no_folha(d, dados);
 
-    }else{//caso de haver redistribuição ou concatenação
+        int p = 0;
+        busca_binaria(no, &p, cod, 0, no->m, 1);
 
-        fseek(indice, no->pont_pai, SEEK_SET);
-        TNoInterno *w = le_no_interno(d, indice);
-        if(!w)return -1;
-        int op = -2;
-        int index = 0;
-        no = retira_pizza(no, p);
-        TNoFolha *irmao = get_irmao_op(d, dados, w, no, pos, &op, &index);
-        fseek(dados, w->p[index], SEEK_SET);
-        //TNoFolha *q = le_no_folha(d, dados);
+        if(no->m > d || no->pont_pai == -1){//nao tem concatenacao nem redistribuicao
 
-        if(op == -1){
-            printf("\nantes\n");
-            imprime_no_interno(d, w);
-            imprime_no_folha(d, no);
-            imprime_no_folha(d, irmao);
-            redistribui_dir(irmao, no, w);
-            printf("depois\n");
-            imprime_no_interno(d, w);
-            imprime_no_folha(d, no);
-            imprime_no_folha(d, irmao);
-            printf("\n\n");
-            fseek(dados, pos, SEEK_SET);//vou gravar o noh p
+            no = retira_pizza(no, p);
+
+            fseek(dados, pos, SEEK_SET);
             salva_no_folha(d, no, dados);
-            fseek(dados, w->p[index], SEEK_SET);
-            salva_no_folha(d, irmao, dados);
-            fseek(indice, no->pont_pai, SEEK_SET);
-            salva_no_interno(d, w, indice);
-            fclose(indice);
-            fclose(dados);
-        }
-        else if(op == 0){
-            printf("\nantes redist esq\n");
-            imprime_no_interno(d, w);
-            imprime_no_folha(d, no);
-            imprime_no_folha(d, irmao);
-            redistribui_esq(irmao, no, w);
-            printf("depois\n\n");
-            imprime_no_interno(d, w);
-            imprime_no_folha(d, no);
-            printf("\n\n");
-            imprime_no_folha(d, irmao);
-            fseek(dados, pos, SEEK_SET);//vou gravar o noh p
-            salva_no_folha(d, no, dados);
-            fseek(dados, w->p[index], SEEK_SET);
-            salva_no_folha(d, irmao, dados);
-            fseek(indice, no->pont_pai, SEEK_SET);
-            salva_no_interno(d, w, indice);
-            fclose(indice);
+
+            /*rewind(dados);
+            no = le_no_folha(d, dados);
+            while(no){
+
+                imprime_no_folha(d, no);
+                no = le_no_folha(d, dados);
+            }*/
+            libera_no_folha(d, no);
             fclose(dados);
 
+        }else{//caso de haver redistribuição ou concatenação
+
+            fseek(indice, no->pont_pai, SEEK_SET);
+            TNoInterno *w = le_no_interno(d, indice);
+            if(!w)return -1;
+            int op = -2;
+            int index = 0;
+            no = retira_pizza(no, p);
+            TNoFolha *irmao = get_irmao_op(d, dados, w, no, pos, &op, &index);
+
+            if(op == -1){
+                redistribui_dir(irmao, no, w);
+
+                fseek(dados, w->p[index], SEEK_SET);//vou gravar o noh p
+                salva_no_folha(d, no, dados);
+                fseek(dados, w->p[index + 1], SEEK_SET);
+                salva_no_folha(d, irmao, dados);
+                fseek(indice, no->pont_pai, SEEK_SET);
+                salva_no_interno(d, w, indice);
+                fclose(indice);
+
+
+                /*rewind(dados);
+                no = le_no_folha(d, dados);
+                while(no){
+
+                    imprime_no_folha(d, no);
+                    no = le_no_folha(d, dados);
+                }
+
+                imprime_no_interno(d, w);*/
+
+                fclose(dados);
+            }
+            else if(op == 0){
+                redistribui_esq(irmao, no, w);
+
+                fseek(dados, w->p[index], SEEK_SET);//vou gravar o noh p
+                salva_no_folha(d, no, dados);
+                fseek(dados, w->p[index + 1], SEEK_SET);
+                salva_no_folha(d, irmao, dados);
+                fseek(indice, no->pont_pai, SEEK_SET);
+                salva_no_interno(d, w, indice);
+                fclose(indice);
+
+                /*rewind(dados);
+                no = le_no_folha(d, dados);
+                while(no){
+
+                    imprime_no_folha(d, no);
+                    no = le_no_folha(d, dados);
+                }*/
+
+                fclose(dados);
+
+            }
+            else{//concatena
+
+            }
+
         }
-        else{//concatena
-            printf("oi\n");
-        }
+
+        return pos;
+
+    }else return -1;
+}
+
+void carrega_dados(int d, char *nome_arquivo_entrada, char *nome_arquivo_metadados, char *nome_arquivo_indice, char *nome_arquivo_dados) {
+
+    TListaPizzas *pizzas;
+    fclose(fopen(nome_arquivo_dados, "wb"));//Apaga o conteudo do arquivo.
+    fclose(fopen(nome_arquivo_indice, "wb"));
+    fclose(fopen(nome_arquivo_metadados, "wb"));
+    pizzas = le_pizzas(nome_arquivo_entrada);
+
+    for (int i = 0; i < pizzas->qtd; i++) {
+        //printf("Pizza %d\n", pizzas->lista[i]->cod);
+        insere(pizzas->lista[i]->cod,
+               pizzas->lista[i]->nome,
+               pizzas->lista[i]->categoria,
+               pizzas->lista[i]->preco,
+               nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d
+        );
+
 
     }
-    return pos;
+
+    //printf("\n\n");
+
 }
 
-void carrega_dados(int d, char *nome_arquivo_entrada, char *nome_arquivo_metadados, char *nome_arquivo_indice, char *nome_arquivo_dados)
-{
-    //TODO: Implementar essa funcao
+//Imprime as pizzas
+int imprimirArvore(int d, char *nome_arquivo_dados) {
+
+    FILE *arq_Dados = fopen(nome_arquivo_dados, "rb");
+
+    rewind(arq_Dados);
+    TNoFolha *noFolha = le_no_folha(d, arq_Dados);
+    if(noFolha){
+        while (noFolha) {
+            imprime_no_folha(d, noFolha);
+            noFolha = le_no_folha(d, arq_Dados);
+        }
+        return 1;
+    }else return 0;
+
 }
+
+//Verifica se o codigo da pizza existe
+int buscaPizza(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, char *nome_arquivo_dados, int d){
+
+    int pos = busca(cod, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d);
+
+    if(buscaFolha(pos, nome_arquivo_dados, cod, d)) {
+
+        FILE *arq_Dados = fopen(nome_arquivo_dados, "rb");
+        fseek(arq_Dados, pos, SEEK_SET);
+        TNoFolha *noFolha = le_no_folha(d, arq_Dados);
+        int i;
+        for(i = 0; cod != noFolha->pizzas[i]->cod; i++);
+        TPizza *p = noFolha->pizzas[i];
+        imprime_pizza(p);
+        fclose(arq_Dados);
+        return 1;
+    }else return 0;
+}
+
+//Modifica a pizza
+void modifica(int cod, char *nome, char *categoria, float preco, char *nome_arquivo_metadados, char *nome_arquivo_indice, char *nome_arquivo_dados, int d){
+
+    TPizza *p = pizza(cod, nome, categoria, preco);
+
+    int pos = busca(cod, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d);
+
+    FILE *arq_Dados = fopen(nome_arquivo_dados, "rb+");
+    fseek(arq_Dados, pos, SEEK_SET);
+    TNoFolha *noFolha = le_no_folha(d, arq_Dados);
+    int i = 0;
+    while(noFolha->pizzas[i]->cod != cod) i++;
+
+    noFolha->pizzas[i] = p;
+
+    fseek(arq_Dados, pos, SEEK_SET);
+    salva_no_folha(d, noFolha, arq_Dados);
+
+    libera_no_folha(d, noFolha);
+    free(p);
+
+    fclose(arq_Dados);
+}
+
+int menu(){
+    int opt;
+    printf("\nOpcoes:\n");
+    printf("0. Sair\n");
+    printf("1. Inserir\n");
+    printf("2. Remover\n");
+    printf("3. Remover todas pizzas de uma categoria.\n");
+    printf("4. Imprimir arvore.\n");
+    printf("5. Buscar pizza.\n");
+    printf("6. Buscar todas pizzas de uma categoria.\n");
+    printf("7. Carregar pizzas apartir de um arquivo.\n");
+    printf("8. Modificar pizza.\n");
+    scanf("%d", &opt);
+
+    return opt;
+}
+
+void tarefa(int opt, char *nome_arquivo_metadados, char *nome_arquivo_indice, char *nome_arquivo_dados, int d) {
+
+    if (opt == 0){
+
+        printf("Saindo...\n");
+
+    }else if(opt == 1){//Inserir
+        int cod;
+        char nome[50];
+        char categoria[20];
+        float preco;
+        printf("\nInformacoes da pizza:\n");
+        printf("Codigo:\n");
+        scanf("%d", &cod);
+        printf("Nome\n");
+        scanf(" %[^\n]", nome);
+        printf("Categoria\n");
+        scanf(" %[^\n]", categoria);
+        printf("Preço\n");
+        scanf("%f", &preco);
+        if(insere(cod, nome, categoria, preco, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d) != -1){
+            printf("Inserido com Sucesso\n");
+        }else printf("Codigo ja exitente\n");
+
+    }else if(opt == 2){//Remover
+
+        int cod;
+        printf("Codigo:\n");
+        scanf("%d", &cod);
+        exclui(cod, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d);
+
+    }else if(opt == 3){//Remove todas as pizzas de uma categoria
+        char categoria[20];
+
+        printf("Digite a categoria:\n");
+        scanf(" %[^\n]", categoria);
+
+        excluiCategoria(categoria, nome_arquivo_dados, nome_arquivo_indice, nome_arquivo_metadados, d);
+
+    }else if(opt == 4){//Imprimir arvore
+
+        if(!imprimirArvore(d, nome_arquivo_dados)) printf("Sem pizzas cadastradas.\n");
+
+    }else if(opt == 5){//Buscar pizza
+
+        int cod;
+        printf("Codigo:\n");
+        scanf("%d", &cod);
+        if(!buscaPizza(cod, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d))
+            printf("Pizza nao existente.\n");
+
+    }else if(opt == 6){//Buscar todas as pizzas de uma categoria
+
+        char categoria[20];
+
+        printf("Digite a categoria:\n");
+        scanf(" %[^\n]", categoria);
+
+        FILE *arq_Dados = fopen(nome_arquivo_dados, "rb");
+
+        TNoFolha *noFolha = le_no_folha(d, arq_Dados);
+
+        while(noFolha){
+
+            for(int i = 0; i < noFolha->m; i++){
+                if(strcmp(noFolha->pizzas[i]->categoria, categoria) == 0){
+                    imprime_pizza(noFolha->pizzas[i]);
+                }
+            }
+
+            noFolha = le_no_folha(d, arq_Dados);
+        }
+        fclose(arq_Dados);
+
+    }else if(opt == 7){//Carregar pizzas a partir de um arquivo
+
+        char nome_arquivo_entrada[20];
+
+        printf("Nome do arquivo de entrada(com .txt ou .dat).\n");
+        scanf(" %s", nome_arquivo_entrada);
+        carrega_dados(d, nome_arquivo_entrada, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados);
+
+    }else if(opt == 8){//modificar pizza.
+
+        int cod;
+        char nome[50];
+        char categoria[20];
+        float preco;
+
+        printf("Codigo:\n");
+        scanf("%d", &cod);
+        if(buscaPizza(cod, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d)) {
+            printf("Novo nome:\n");
+            scanf(" %[^\n]", nome);
+            printf("Nova categoria:\n");
+            scanf(" %[^\n]", categoria);
+            printf("Novo preco:\n");
+            scanf(" %f", &preco);
+            modifica(cod, nome, categoria, preco, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d);
+        }else printf("Não existe essa pizza.\n");
+
+    }else{
+        printf("Tarefa invalida.\n");
+    }
+}
+
+/*int main(){
+
+    int opt;
+    int d;
+    char nome_arquivo_metadados[20] = "metadados.dat";
+    char nome_arquivo_indice[20] = "indice.dat";
+    char nome_arquivo_dados[20] = "pizzas.dat";
+    printf("Digite a ordem da arvore.\n");
+    scanf(" %d", &d);
+    //printf("Nome do arquivo de metadados(com .txt ou .dat).\n");
+    //scanf(" %s", nome_arquivo_metadados);
+    //printf("Nome do arquivo de indice(com .txt ou .dat).\n");
+    //scanf(" %s", nome_arquivo_indice);
+    //printf("Nome do arquivo de dados(com .txt ou .dat).\n");
+    //scanf(" %s", nome_arquivo_dados);
+
+    int flag;
+    printf("\nDigite 1 caso deseje apagar o conteudo existente nesses arquivos e 0 se desejar manter.\n");
+    scanf(" %d", &flag);
+    if(flag){
+        fclose(fopen(nome_arquivo_dados, "wb"));//Apaga o conteudo do arquivo.
+        fclose(fopen(nome_arquivo_indice, "wb"));
+        fclose(fopen(nome_arquivo_metadados, "wb"));
+    }
+
+    do{
+
+        opt = menu();
+        tarefa(opt, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d);
+
+    }while(opt);
+
+    return 0;
+}*/
