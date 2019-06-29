@@ -356,7 +356,7 @@ void monta_arvore_h3() {
 }
 
 BEGIN_TESTS();
-/*
+
     TEST("Busca 1 -- chave procurada esta na raiz. Raiz eh folha");
     if (!skip) {
         int pont = INT_MAX;
@@ -942,7 +942,8 @@ BEGIN_TESTS();
         pont = exclui(13, NOME_ARQUIVO_METADADOS, NOME_ARQUIVO_INDICE, NOME_ARQUIVO_DADOS, 2);
         ASSERT_EQUAL(0, pont);
 
-        TMetadados *tabMetadados = metadados(D, 0, 0, 3 * tamanho_no_interno(D), 6 * tamanho_no_folha(D));
+        //raiz da arvore mudou para 1 * tamanho_no_interno
+        TMetadados *tabMetadados = metadados(D, 1 * tamanho_no_interno(D), 0, 3 * tamanho_no_interno(D), 6 * tamanho_no_folha(D));
         TMetadados *tabMetadadosSaida = le_arq_metadados(NOME_ARQUIVO_METADADOS);
         ASSERT_EQUAL_CMP(D, tabMetadados, tabMetadadosSaida, cmp_metadados);
         free(tabMetadados);
@@ -955,7 +956,7 @@ BEGIN_TESTS();
                                                                          2 * tamanho_no_interno(D),
                                                                          37
                                                          ),
-                                                         cria_no_interno(D, 4, 0, 1, 2 * 2 + 1,
+                                                         cria_no_interno(D, 4, 0, 1, 2 * 2 + 1, //essa eh a nova raiz da arvore
                                                                          0 * tamanho_no_folha(D),
                                                                          2 * tamanho_no_folha(D),
                                                                          3 * tamanho_no_folha(D),
@@ -982,8 +983,8 @@ BEGIN_TESTS();
         libera_nos_internos(tabIndiceSaida);
 
         TListaNosFolhas *tabDados = cria_nos_folhas(D, 6,
-                                                    cria_no_folha(D, 1 * tamanho_no_interno(D), 1 * tamanho_no_folha(D),
-                                                                  2,
+                                                    cria_no_folha(D, 1 * tamanho_no_interno(D), 2 * tamanho_no_folha(D),
+                                                                  3,
                                                                   pizza(10, "Calabresa", "Salgada", 30),
                                                                   pizza(15, "Bianca", "Salgada", 30),
                                                                   pizza(20, "Lombinho", "Salgada", 32)
@@ -998,17 +999,18 @@ BEGIN_TESTS();
                                                                   pizza(25, "Banana", "Doce", 25),
                                                                   pizza(35, "Camarao", "Salgada", 35)
                                                     ),
-                                                    cria_no_folha(D, 2 * tamanho_no_interno(D), 4 * tamanho_no_folha(D),
+                                                    cria_no_folha(D, 1 * tamanho_no_interno(D), 4 * tamanho_no_folha(D),
                                                                   2,
                                                                   pizza(37, "Chocolate com Morango", "Doce", 28),
                                                                   pizza(38, "Calabresa Acebolada", "Salgada", 30)
                                                     ),
-                                                    cria_no_folha(D, 2 * tamanho_no_interno(D), 5 * tamanho_no_folha(D),
+                                                    cria_no_folha(D, 1 * tamanho_no_interno(D), 5 * tamanho_no_folha(D),
                                                                   2,
                                                                   pizza(39, "Frango com Catupiry", "Salgada", 35),
                                                                   pizza(50, "Marguerita", "Salgada", 28)
                                                     ),
-                                                    cria_no_folha(D, 2 * tamanho_no_interno(D), -1, 2,
+                                                    cria_no_folha(D, 1 * tamanho_no_interno(D), -1,
+                                                                  3,
                                                                   pizza(55, "Morango com Nutella", "Doce Especial", 45),
                                                                   pizza(60, "Presunto, Queijo e Tomate", "Salgada", 31),
                                                                   pizza(70, "Muzzarela", "Salgada", 28)
@@ -1093,7 +1095,7 @@ BEGIN_TESTS();
         libera_nos_folhas(D, tabDados);
         libera_nos_folhas(D, tabDadosSaida);
     }
-*/
+
     TEST("Carga de Dados Inicial 3, 50 registros, 11 nohs internos, 24 folhas");
     if (!skip) {
         gera_arquivo_carga_inicial_3();
@@ -1142,7 +1144,7 @@ BEGIN_TESTS();
                                                                          39,
                                                                          42
                                                          ),
-                                                         cria_no_interno(D, 2, 2 * tamanho_no_interno(D), 1,
+                                                         cria_no_interno(D, 2, 7 * tamanho_no_interno(D), 1,
                                                                          2 * 2 + 1, //n19
                                                                          9 * tamanho_no_folha(D),
                                                                          10 * tamanho_no_folha(D),
@@ -1150,7 +1152,7 @@ BEGIN_TESTS();
                                                                          60,
                                                                          77
                                                          ),
-                                                         cria_no_interno(D, 2, 2 * tamanho_no_interno(D), 1,
+                                                         cria_no_interno(D, 2, 7 * tamanho_no_interno(D), 1,
                                                                          2 * 2 + 1, //n21
                                                                          12 * tamanho_no_folha(D),
                                                                          13 * tamanho_no_folha(D),
@@ -1158,7 +1160,7 @@ BEGIN_TESTS();
                                                                          87,
                                                                          93
                                                          ),
-                                                         cria_no_interno(D, 2, 2 * tamanho_no_interno(D), 1,
+                                                         cria_no_interno(D, 2, 7 * tamanho_no_interno(D), 1,
                                                                          2 * 2 + 1, //n24
                                                                          15 * tamanho_no_folha(D),
                                                                          16 * tamanho_no_folha(D),

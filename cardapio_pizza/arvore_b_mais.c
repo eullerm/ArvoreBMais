@@ -1,7 +1,8 @@
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
 #endif
-
+#define DIR 1
+#define  ESQ 0
 #include <limits.h>
 #include <stdlib.h>
 #include <mem.h>
@@ -26,7 +27,8 @@ void checaMetadados(char *nome_arquivo_metadados, int d){
 }
 
 //Insere um no interno
-void insereNoInterno(int cod, int d, char *nome_arquivo_indice, FILE *arq_Dados ,TMetadados *metadados, int pos){
+void insereNoInterno(int cod, int d, char *nome_arquivo_indice, FILE *arq_Dados ,TMetadados *metadados, int pos, int flag){
+
 
     FILE *arq_Indices = fopen(nome_arquivo_indice, "rb+");
     fseek(arq_Indices, pos, SEEK_SET);
@@ -63,6 +65,8 @@ void insereNoInterno(int cod, int d, char *nome_arquivo_indice, FILE *arq_Dados 
         fseek(arq_Indices, pos, SEEK_SET);
         salva_no_interno(d, novo, arq_Indices);
         libera_no_interno(novo);
+
+        fclose(arq_Indices);
 
     }else{//Caso precise dividir
 
@@ -113,6 +117,7 @@ void insereNoInterno(int cod, int d, char *nome_arquivo_indice, FILE *arq_Dados 
 
         novo2->p[k2] = guardaP[meio + 1];
         TNoFolha *mudaP;
+        TNoInterno *mudaPI;
         while (k2 < meio) {
 
             if(novo2->aponta_folha) { //Para alterar o pai do no
@@ -121,7 +126,12 @@ void insereNoInterno(int cod, int d, char *nome_arquivo_indice, FILE *arq_Dados 
                 mudaP->pont_pai = metadados->pont_prox_no_interno_livre;
                 fseek(arq_Dados, novo2->p[k2], SEEK_SET);
                 salva_no_folha(d, mudaP, arq_Dados);
-                libera_no_folha(d, mudaP);
+            }else if(flag == 1){
+                fseek(arq_Indices, novo2->p[k2], SEEK_SET);
+                mudaPI = le_no_interno(d, arq_Indices);
+                mudaPI->pont_pai = metadados->pont_prox_no_interno_livre + flag * tamanho_no_interno(d);
+                fseek(arq_Indices, novo2->p[k2], SEEK_SET);
+                salva_no_interno(d, mudaPI, arq_Indices);
             }
 
             novo2->chaves[k2] = guardaChaves[k2 + meio + 1];
@@ -137,6 +147,13 @@ void insereNoInterno(int cod, int d, char *nome_arquivo_indice, FILE *arq_Dados 
             fseek(arq_Dados, novo2->p[k2], SEEK_SET);
             salva_no_folha(d, mudaP, arq_Dados);
             libera_no_folha(d, mudaP);
+        }else if(flag == 1){
+            fseek(arq_Indices, novo2->p[k2], SEEK_SET);
+            mudaPI = le_no_interno(d, arq_Indices);
+            mudaPI->pont_pai = metadados->pont_prox_no_interno_livre + flag * tamanho_no_interno(d);
+            fseek(arq_Indices, novo2->p[k2], SEEK_SET);
+            salva_no_interno(d, mudaPI, arq_Indices);
+            libera_no_interno(mudaPI);
         }
         //-------------------------------------------------------------------//
 
@@ -151,13 +168,22 @@ void insereNoInterno(int cod, int d, char *nome_arquivo_indice, FILE *arq_Dados 
             salva_no_interno(d, novo2, arq_Indices);
             libera_no_interno(novo2);
 
+            fclose(arq_Indices);
+
+            insereNoInterno(guardaChaves[meio], d, nome_arquivo_indice, arq_Dados, metadados, noPai->pont_pai, flag+1);
+
+            arq_Indices = fopen(nome_arquivo_indice, "rb+");
             fseek(arq_Indices, 0, SEEK_END);
             metadados->pont_prox_no_interno_livre = ftell(arq_Indices); //Passa a apontar para o final do arquivo.
+            fclose(arq_Indices);
 
-            insereNoInterno(guardaChaves[meio], d, nome_arquivo_indice, arq_Dados, metadados, noPai->pont_pai);
         }
 
         else {
+            if(flag!=0){
+                metadados->pont_prox_no_interno_livre += flag * tamanho_no_interno(d);
+            }
+
             metadados->pont_raiz = metadados->pont_prox_no_interno_livre + tamanho_no_interno(d);
             novo->pont_pai = metadados->pont_raiz;
             novo2->pont_pai = metadados->pont_raiz;
@@ -181,16 +207,15 @@ void insereNoInterno(int cod, int d, char *nome_arquivo_indice, FILE *arq_Dados 
             fseek(arq_Indices, 0, SEEK_END);
             metadados->pont_prox_no_interno_livre = ftell(arq_Indices);//Passa a apontar para o final do arquivo.
 
+            fclose(arq_Indices);
         }
 
     }
-
-    fclose(arq_Indices);
-
 }
 
 //Insere um no folha
-void insereNoFolha(TNoFolha *no, int cod, TPizza *p, int d, FILE *arq_Dados, TMetadados *metadados, int pos, char *nome_arquivo_indice){
+void insereNoFolha(TNoFolha *no, int cod, TPizza *p, int d, FILE *arq_Dados, TMetadados *metadados, int pos,
+        char *nome_arquivo_indice){
 
     if(no->m < 2*d) {//Caso caiba
 
@@ -273,7 +298,7 @@ void insereNoFolha(TNoFolha *no, int cod, TPizza *p, int d, FILE *arq_Dados, TMe
             int sobe = novo2->pizzas[0]->cod;
             libera_no_folha(d, novo2);
 
-            insereNoInterno(sobe, d, nome_arquivo_indice, arq_Dados, metadados, no->pont_pai);
+            insereNoInterno(sobe, d, nome_arquivo_indice, arq_Dados, metadados, no->pont_pai, 0);
 
             fseek(arq_Dados, 0, SEEK_END);
             metadados->pont_prox_no_folha_livre = ftell(arq_Dados);
@@ -293,6 +318,7 @@ void insereNoFolha(TNoFolha *no, int cod, TPizza *p, int d, FILE *arq_Dados, TMe
             novoPai->aponta_folha = 1;
 
             FILE *arq_Indices = fopen(nome_arquivo_indice, "rb+");
+            fseek(arq_Indices, metadados->pont_prox_no_interno_livre, SEEK_SET);
             salva_no_interno(d, novoPai, arq_Indices);
             metadados->pont_prox_no_interno_livre = ftell(arq_Indices);//Passa a apontar para o final do arquivo.
             fclose(arq_Indices);
@@ -334,10 +360,9 @@ int busca_binaria(void *r,int *pos, int chave, int esq, int dir, int folha){
         }
     }else{
         if(dir >= esq){
-            //printf("Noh interno: COD %d\n", chave);
 
             TNoInterno *raiz = r;
-            //imprime_no_interno(2, raiz);
+
             if(raiz->chaves[meio] < chave){
                 return busca_binaria(raiz, pos, chave,meio+1, dir, folha);
             }else if(raiz->chaves[meio] == chave && raiz->aponta_folha){
@@ -355,26 +380,13 @@ int buscaFolha(int pos, char *nome_arquivo_dados, int cod, int d){
     FILE *arq_Dados = fopen(nome_arquivo_dados, "rb");
     fseek(arq_Dados, pos, SEEK_SET);
     TNoFolha *noFolha = le_no_folha(d, arq_Dados);
-
-    if(noFolha) {
-        //Busca binaria//
-        int inf = 0;
-        int sup = noFolha->m - 1;
-        int meio;
-        while (inf <= sup){
-            meio = (inf + sup)/2;
-            if (cod < noFolha->pizzas[meio]->cod)
-                sup = meio-1;
-            else
-                inf = meio+1;
-        }
-        //-------------------//
-        if (noFolha->pizzas[meio]->cod == cod) return 1;
-        else return 0;
+    int x = 0;
+    if(noFolha){
+        int p = busca_binaria(noFolha, &x, cod, 0, noFolha->m-1, 1);
+        if(p == -1) return 0;
+        else return 1;
     }
-
-    else return 0;
-
+    return 0;
 }
 
 int busca(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, char *nome_arquivo_dados, int d)
@@ -382,9 +394,6 @@ int busca(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, char
     FILE *arq_Indice = fopen(nome_arquivo_indice, "rb");
 
     TMetadados *metadados = le_arq_metadados(nome_arquivo_metadados);
-
-    if(!metadados)return -1;
-
     if(metadados->raiz_folha){
         return metadados->pont_raiz;
 
@@ -393,13 +402,14 @@ int busca(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, char
 
         TNoInterno *noInterno = le_no_interno(d, arq_Indice);
 
+        int i;
         while (noInterno) {
-            //Busca binaria
+
+            //Busca binaria//
             int inf = 0;
             int sup = noInterno->m - 1;
             int meio;
             while (inf <= sup){
-
                 meio = (inf + sup)/2;
                 if (cod < noInterno->chaves[meio])
                     sup = meio-1;
@@ -408,27 +418,30 @@ int busca(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, char
             }
             //-------------------//
 
+            if(meio == noInterno->m) meio--;
             if (cod >= noInterno->chaves[meio]) {
                 if (noInterno->aponta_folha) {
                     return noInterno->p[meio + 1];
                 } else {
                     fseek(arq_Indice, noInterno->p[meio + 1], SEEK_SET);
+                    noInterno = le_no_interno(d, arq_Indice);
                 }
             } else if (cod < noInterno->chaves[meio]) {
                 if (noInterno->aponta_folha) {
                     return noInterno->p[meio];
                 } else {
                     fseek(arq_Indice, noInterno->p[meio], SEEK_SET);
+                    noInterno = le_no_interno(d, arq_Indice);
                 }
 
             }
 
-            noInterno = le_no_interno(d, arq_Indice);
         }
     }
 }
 
-int insere(int cod, char *nome, char *categoria, float preco, char *nome_arquivo_metadados, char *nome_arquivo_indice, char *nome_arquivo_dados, int d)
+int insere(int cod, char *nome, char *categoria, float preco, char *nome_arquivo_metadados, char *nome_arquivo_indice,
+        char *nome_arquivo_dados, int d)
 {
 
     checaMetadados(nome_arquivo_metadados, d);
@@ -457,27 +470,9 @@ int insere(int cod, char *nome, char *categoria, float preco, char *nome_arquivo
             metadados->pont_prox_no_folha_livre = tamanho_no_folha(d);
         }
 
-        //imprime_metadados(metadados);
-
         salva_arq_metadados(nome_arquivo_metadados, metadados);
 
-        rewind(arq_Dados);
-        noFolha = le_no_folha(d, arq_Dados);
-        while(noFolha){
-            imprime_no_folha(d, noFolha);
-            noFolha = le_no_folha(d, arq_Dados);
-        }
-
         fclose(arq_Dados);
-
-
-        FILE *arqIndices = fopen(nome_arquivo_indice, "rb+");
-        TNoInterno * no = le_no_interno(d, arqIndices);
-        while(no) {
-            imprime_no_interno(d, no);
-            no = le_no_interno(d, arqIndices);
-        }
-        fclose(arqIndices);
 
         pos = busca(cod, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d);
 
@@ -502,7 +497,7 @@ TNoFolha *retira_pizza(TNoFolha *no, int pos){
     return no;
 }
 
-//Redistribui com o irmão da direita
+//Redistribui o irmão da direita com o da esquerda
 void redistribui_dir(TNoFolha *dir, TNoFolha *esq, TNoInterno *pai){
     esq->pizzas[esq->m] = dir->pizzas[0];//passei do irmao da direita pro da esquerda;
     int cod = esq->pizzas[esq->m]->cod;
@@ -515,7 +510,7 @@ void redistribui_dir(TNoFolha *dir, TNoFolha *esq, TNoInterno *pai){
 }
 
 //Move as pizzas
-TNoFolha *shift(TNoFolha *no,int cod){
+TNoFolha *shift(TNoFolha *no){
     int i;
     for(i = no->m; i>0; i--){
         no->pizzas[i] = no->pizzas[i-1];
@@ -523,17 +518,17 @@ TNoFolha *shift(TNoFolha *no,int cod){
     return no;
 }
 
-//Redistribui com o irmão da esquerda
+//Redistribui o irmão da esquerda pro da direita
 void redistribui_esq(TNoFolha *dir, TNoFolha *esq, TNoInterno *pai){
     int cod = esq->pizzas[esq->m-1]->cod;
-    dir = shift(dir, cod);
+    dir = shift(dir);
     dir->pizzas[0] = esq->pizzas[esq->m-1];
     int pos = 0;
     busca_binaria(pai, &pos, cod, 0, pai->m-1, 0);//achei a posição do pai que tem os filhos
     pai->chaves[pos] = cod;//atualizei o indice
 }
 
-//Retornao irmão
+//Retorna o irmão
 TNoFolha * get_irmao_op(int d,FILE *dados,TNoInterno *pai, TNoFolha *no, int pos, int *op, int *index){//retorna a posicao do irmao e a operação que será feita com ele
     // op = -1 = redist com o irmao da direita. op = 0 = redist com o filho da esquerda. op = 1 = concatenação com o filho da direita.
     int i = 0;
@@ -559,7 +554,7 @@ TNoFolha * get_irmao_op(int d,FILE *dados,TNoInterno *pai, TNoFolha *no, int pos
             }
             return dir;
         }else{
-            //carrego o no da direita e da esquerda TODO nao aguento mais
+            //carrego o no da direita e da esquerda
             TNoFolha *dir;
             TNoFolha *esq;
             esq = dir = NULL;
@@ -614,6 +609,19 @@ void excluiCategoria(char *categoria, char *nome_arquivo_dados, char *nome_arqui
 
 }
 
+void concatena(TNoFolha *no, TNoFolha *irmao, TNoInterno *pai, int d, int op){
+    if(op == DIR) {
+        for (int i = (no->m - 1); i < 0; i++){
+            irmao = shift(irmao);
+            irmao->pizzas[0] = no->pizzas[i];
+            irmao->m++;
+
+        }
+
+
+    }
+}
+
 int exclui(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, char *nome_arquivo_dados, int d)
 {
     int pos = busca(cod, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d);
@@ -636,14 +644,7 @@ int exclui(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, cha
             fseek(dados, pos, SEEK_SET);
             salva_no_folha(d, no, dados);
 
-            /*rewind(dados);
-            no = le_no_folha(d, dados);
-            while(no){
-
-                imprime_no_folha(d, no);
-                no = le_no_folha(d, dados);
-            }*/
-
+            libera_no_folha(d, no);
             fclose(dados);
 
         }else{//caso de haver redistribuição ou concatenação
@@ -667,17 +668,6 @@ int exclui(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, cha
                 salva_no_interno(d, w, indice);
                 fclose(indice);
 
-
-                /*rewind(dados);
-                no = le_no_folha(d, dados);
-                while(no){
-
-                    imprime_no_folha(d, no);
-                    no = le_no_folha(d, dados);
-                }
-
-                imprime_no_interno(d, w);*/
-
                 fclose(dados);
             }
             else if(op == 0){
@@ -691,19 +681,11 @@ int exclui(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, cha
                 salva_no_interno(d, w, indice);
                 fclose(indice);
 
-                /*rewind(dados);
-                no = le_no_folha(d, dados);
-                while(no){
-
-                    imprime_no_folha(d, no);
-                    no = le_no_folha(d, dados);
-                }*/
-
                 fclose(dados);
 
             }
             else{//concatena
-                printf("oi\n");
+
             }
 
         }
@@ -732,8 +714,6 @@ void carrega_dados(int d, char *nome_arquivo_entrada, char *nome_arquivo_metadad
 
 
     }
-
-    //printf("\n\n");
 
 }
 
