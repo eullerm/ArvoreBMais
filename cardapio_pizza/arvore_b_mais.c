@@ -2,7 +2,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 #define DIR 1
-#define  ESQ 0
+#define  ESQ 2
 #include <limits.h>
 #include <stdlib.h>
 #include <mem.h>
@@ -557,7 +557,6 @@ TNoFolha * get_irmao_op(int d,FILE *dados,TNoInterno *pai, TNoFolha *no, int pos
             //carrego o no da direita e da esquerda
             TNoFolha *dir;
             TNoFolha *esq;
-            esq = dir = NULL;
             fseek(dados, pai->p[p-1], SEEK_SET);
             esq = le_no_folha(2, dados);
             fseek(dados, pai->p[p+1], SEEK_SET);
@@ -576,7 +575,7 @@ TNoFolha * get_irmao_op(int d,FILE *dados,TNoInterno *pai, TNoFolha *no, int pos
                     *op = 0;
                     return esq;
                 }else{
-                    *op = 1;
+                    *op = 2;
                     return esq;
                 }
             }
@@ -609,6 +608,7 @@ void excluiCategoria(char *categoria, char *nome_arquivo_dados, char *nome_arqui
 
 }
 
+//Acho que nao sera necessaria.
 TNoInterno *shift_interno(TNoInterno *pai){//faz um shift
     //tenho q deslocar tanto os indices quanto
     //{1,5,9}
@@ -642,7 +642,7 @@ TNoInterno *shift_interno(TNoInterno *pai){//faz um shift
 int q_filhos(TNoInterno *pai){
     if(pai){
         int i;
-        int q = 0;
+        int q = 1;
         for(i = 0; i < pai->m; i++){
             if(pai->p[i] != -1)q++;
         }
@@ -651,25 +651,55 @@ int q_filhos(TNoInterno *pai){
     return 0;
 }
 
-void concatena(TNoFolha *no, TNoFolha *irmao, TNoInterno *pai, int d, int op, int ind_pai){
+void concatena(TNoFolha *no, TNoFolha *irmao, TNoInterno *pai, int d, int op, int ind_pai ,int *index, FILE *dados){
     if(op == DIR) {
-        for (int i = no->m - 1; i >= 0; i--){
-            irmao = shift(irmao);
-            irmao->pizzas[0] = no->pizzas[i];
-            no->pizzas[i] = NULL;
+        for (int i =0; i < irmao->m; i++){
+
+            no->pizzas[no->m] = irmao->pizzas[i];
+            no->m++;
+        }
+
+        *index = 0; //Para descobrir qual index do pai vai ser apagado
+        for(int i = 1; pai->p[i] != no->pont_prox; i++ ) (*index)++;
+
+
+
+        no->pont_prox = irmao->pont_prox;
+        for (int i = *index; i < pai->m; i++) {
+            if (pai->chaves[i+1] != -1) pai->chaves[i] = pai->chaves[i+1];
+            else pai->chaves[i] = -1;
+
+            pai->p[i+1] = irmao->pont_prox;
+            fseek(dados, irmao->pont_prox, SEEK_SET);
+            irmao = le_no_folha(d, dados);
+        }
+        pai->m--;
+    }else if(op == ESQ){
+        for (int i =0; i < no->m; i++) {
+
+            irmao->pizzas[irmao->m] = no->pizzas[i];
             irmao->m++;
-            no->m--;
-            pai = shift_interno(pai);
-            //imprime_no_interno(d, pai);
-            //imprime_no_folha(d, irmao);
         }
-    }else{
-        //imprime_no_interno(d, pai);
-        int i, j;
-        for(i = 0, j = irmao->m - 1; i < no->m - 1; i++, j++){
-            irmao->pizzas[j] = no->pizzas[i];
+
+        *index = 0; //Para descobrir qual index do pai vai ser apagado
+        for(int i = 1; pai->p[i] != irmao->pont_prox; i++ ) (*index)++;
+
+        irmao->pont_prox = no->pont_prox; //Aponta para onde o noh excluido apontava
+
+        for (int i = *index; i < pai->m; i++) {
+            pai->chaves[i] = pai->chaves[i + 1];
+            if(pai->chaves[i] != -1) pai->p[i + 1] = no->pont_prox;
+            fseek(dados, no->pont_prox, SEEK_SET);
+            no = le_no_folha(d, dados);
         }
+
         imprime_no_folha(d, irmao);
+
+        pai->p[pai->m] = -1;
+
+        pai->m--;
+
+        imprime_no_interno(d, pai);
     }
 }
 
@@ -736,19 +766,10 @@ int exclui(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, cha
 
             }
             else{//concatena
-                //depois da chamada da concatena, tem que testar se o pai tem pelo menos d chaves e 2 filhos
-                printf("nohs antes da concatenacao:\n");
-                imprime_no_folha(d, no);
-                imprime_no_folha(d, irmao);
-                printf("pai:\n");
-                imprime_no_interno(d, w);
-                concatena(no, irmao, w, d, op, no->pont_pai);
-                printf("nohs depois da concatenacao:\n");
-                //printf("pos noh: %d\n", pos);
-                imprime_no_folha(d, no);
-                imprime_no_folha(d, irmao);
-                printf("pai:\n");
-                imprime_no_interno(d, w);
+
+                int guardaP;
+                concatena(no, irmao, w, d, op, no->pont_pai, &guardaP, dados);
+
                 if(w->pont_pai == -1 && q_filhos(w) == 1){//vai ter q apagar esse pai
                     irmao->pont_pai = -1;
                     metadados->pont_raiz = w->p[0];//vai ser sempre essa posição (graças a deus)
@@ -761,20 +782,24 @@ int exclui(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, cha
                     libera_no_interno(w);
                     libera_no_folha(d, no);
                 }
-                else if(w->m < d){//vai propagar :(
+                else if(w->m < d && w->pont_pai != -1){//vai propagar :(
 
 
                 }else{
+
                     fseek(indice, irmao->pont_pai, SEEK_SET);
                     salva_no_interno(d, w, indice);
-                    fseek(dados, w->p[0], SEEK_SET);
-                    salva_no_folha(d, irmao, dados);
+                    fseek(dados, w->p[guardaP], SEEK_SET);
+                    if(op == DIR)
+                        salva_no_folha(d, no, dados);
+                    else if (op == ESQ)
+                        salva_no_folha(d, irmao, dados);
+
                     fclose(indice);
                     fclose(dados);
-                    pos = w->p[0];
+
                 }
             }
-
         }
         return pos;
     }else return -1;
@@ -803,19 +828,31 @@ void carrega_dados(int d, char *nome_arquivo_entrada, char *nome_arquivo_metadad
 }
 
 //Imprime as pizzas
-int imprimirArvore(int d, char *nome_arquivo_dados) {
+int imprimirArvore(int d, char *nome_arquivo_dados, char *nome_arquivo_indice, char *nome_arquivo_metadados) {
 
-    FILE *arq_Dados = fopen(nome_arquivo_dados, "rb");
+    TMetadados *metadados = le_arq_metadados(nome_arquivo_metadados);
 
-    rewind(arq_Dados);
-    TNoFolha *noFolha = le_no_folha(d, arq_Dados);
-    if(noFolha){
-        while (noFolha) {
-            imprime_no_folha(d, noFolha);
-            noFolha = le_no_folha(d, arq_Dados);
-        }
+    if(!metadados) return 0;//Caso nao tenha nada no metadados então a arvore está vazia
+
+    if(metadados->raiz_folha){
+        FILE *arq_Dados = fopen(nome_arquivo_dados, "rb");
+        rewind(arq_Dados);
+        TNoFolha *noFolha = le_no_folha(d, arq_Dados);
+        imprime_no_folha(d, noFolha);
         return 1;
-    }else return 0;
+    }else {
+        FILE *arq_Dados = fopen(nome_arquivo_dados, "rb");
+
+        rewind(arq_Dados);
+        TNoFolha *noFolha = le_no_folha(d, arq_Dados);
+        if (noFolha) {
+            while (noFolha) {
+                imprime_no_folha(d, noFolha);
+                noFolha = le_no_folha(d, arq_Dados);
+            }
+            return 1;
+        } else return 0;
+    }
 
 }
 
@@ -893,13 +930,13 @@ void tarefa(int opt, char *nome_arquivo_metadados, char *nome_arquivo_indice, ch
         printf("\nInformacoes da pizza:\n");
         printf("Codigo:\n");
         scanf("%d", &cod);
-        printf("Nome\n");
-        scanf(" %[^\n]", nome);
-        printf("Categoria\n");
-        scanf(" %[^\n]", categoria);
-        printf("Preço\n");
-        scanf("%f", &preco);
-        if(insere(cod, nome, categoria, preco, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d) != -1){
+        //printf("Nome\n");
+        //scanf(" %[^\n]", nome);
+        //printf("Categoria\n");
+        //scanf(" %[^\n]", categoria);
+        //printf("Preço\n");
+        //scanf("%f", &preco);
+        if(insere(cod, "nome", "categoria", 2, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d) != -1){
             printf("Inserido com Sucesso\n");
         }else printf("Codigo ja exitente\n");
 
@@ -985,7 +1022,7 @@ void tarefa(int opt, char *nome_arquivo_metadados, char *nome_arquivo_indice, ch
     }
 }
 
-/*int main(){
+int main(){
 
     int opt;
     int d;
@@ -1018,4 +1055,4 @@ void tarefa(int opt, char *nome_arquivo_metadados, char *nome_arquivo_indice, ch
     }while(opt);
 
     return 0;
-}*/
+}
