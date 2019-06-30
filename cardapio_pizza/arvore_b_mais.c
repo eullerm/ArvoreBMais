@@ -215,7 +215,7 @@ void insereNoInterno(int cod, int d, char *nome_arquivo_indice, FILE *arq_Dados 
 
 //Insere um no folha
 void insereNoFolha(TNoFolha *no, int cod, TPizza *p, int d, FILE *arq_Dados, TMetadados *metadados, int pos,
-        char *nome_arquivo_indice){
+                   char *nome_arquivo_indice){
 
     if(no->m < 2*d) {//Caso caiba
 
@@ -441,7 +441,7 @@ int busca(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, char
 }
 
 int insere(int cod, char *nome, char *categoria, float preco, char *nome_arquivo_metadados, char *nome_arquivo_indice,
-        char *nome_arquivo_dados, int d)
+           char *nome_arquivo_dados, int d)
 {
 
     checaMetadados(nome_arquivo_metadados, d);
@@ -609,23 +609,74 @@ void excluiCategoria(char *categoria, char *nome_arquivo_dados, char *nome_arqui
 
 }
 
-void concatena(TNoFolha *no, TNoFolha *irmao, TNoInterno *pai, int d, int op){
+TNoInterno *shift_interno(TNoInterno *pai){//faz um shift
+    //tenho q deslocar tanto os indices quanto
+    //{1,5,9}
+    //{n,(2,3,4), (6,7,8), (10,11,23)}
+    if(pai){
+        int i;
+        for(i = 0; i < pai->m; i++){
+            if(i >= pai->m-1){//pra nao dar segfault
+                pai->p[i] = pai->p[i+1];
+            }
+            else{
+                pai->chaves[i] = pai->chaves[i+1];
+                pai->p[i] = pai->p[i+1];
+            }
+        }
+        //anulo a ultima posição q tinha valor
+        int j = pai->m;
+        while(j > pai->m-2){
+            if(pai->p[j] != -1){
+                pai->p[j] = -1;
+                pai->chaves[j-1] = -1;
+                break;
+            }
+            j++;
+        }
+        pai->m--;
+        return pai;
+    }return NULL;
+}
+
+int q_filhos(TNoInterno *pai){
+    if(pai){
+        int i;
+        int q = 0;
+        for(i = 0; i < pai->m; i++){
+            if(pai->p[i] != -1)q++;
+        }
+        return q;
+    }
+    return 0;
+}
+
+void concatena(TNoFolha *no, TNoFolha *irmao, TNoInterno *pai, int d, int op, int ind_pai){
     if(op == DIR) {
-        for (int i = (no->m - 1); i < 0; i++){
+        for (int i = no->m - 1; i >= 0; i--){
             irmao = shift(irmao);
             irmao->pizzas[0] = no->pizzas[i];
+            no->pizzas[i] = NULL;
             irmao->m++;
-
+            no->m--;
+            pai = shift_interno(pai);
+            //imprime_no_interno(d, pai);
+            //imprime_no_folha(d, irmao);
         }
-
-
+    }else{
+        //imprime_no_interno(d, pai);
+        int i, j;
+        for(i = 0, j = irmao->m - 1; i < no->m - 1; i++, j++){
+            irmao->pizzas[j] = no->pizzas[i];
+        }
+        imprime_no_folha(d, irmao);
     }
 }
 
 int exclui(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, char *nome_arquivo_dados, int d)
 {
     int pos = busca(cod, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d);
-
+    TMetadados *metadados = le_arq_metadados(nome_arquivo_metadados);
     if(buscaFolha(pos, nome_arquivo_dados, cod, d)){
         FILE * dados = fopen(nome_arquivo_dados, "rb+");
 
@@ -685,13 +736,47 @@ int exclui(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, cha
 
             }
             else{//concatena
+                //depois da chamada da concatena, tem que testar se o pai tem pelo menos d chaves e 2 filhos
+                printf("nohs antes da concatenacao:\n");
+                imprime_no_folha(d, no);
+                imprime_no_folha(d, irmao);
+                printf("pai:\n");
+                imprime_no_interno(d, w);
+                concatena(no, irmao, w, d, op, no->pont_pai);
+                printf("nohs depois da concatenacao:\n");
+                //printf("pos noh: %d\n", pos);
+                imprime_no_folha(d, no);
+                imprime_no_folha(d, irmao);
+                printf("pai:\n");
+                imprime_no_interno(d, w);
+                if(w->pont_pai == -1 && q_filhos(w) == 1){//vai ter q apagar esse pai
+                    irmao->pont_pai = -1;
+                    metadados->pont_raiz = w->p[0];//vai ser sempre essa posição (graças a deus)
+                    metadados->raiz_folha = 1;
+                    salva_arq_metadados(nome_arquivo_metadados, metadados);
+                    pos = w->p[0];
+                    fseek(dados, pos, SEEK_SET);
+                    salva_no_folha(d, irmao, dados);
+                    fclose(dados);
+                    libera_no_interno(w);
+                    libera_no_folha(d, no);
+                }
+                else if(w->m < d){//vai propagar :(
 
+
+                }else{
+                    fseek(indice, irmao->pont_pai, SEEK_SET);
+                    salva_no_interno(d, w, indice);
+                    fseek(dados, w->p[0], SEEK_SET);
+                    salva_no_folha(d, irmao, dados);
+                    fclose(indice);
+                    fclose(dados);
+                    pos = w->p[0];
+                }
             }
 
         }
-
         return pos;
-
     }else return -1;
 }
 
