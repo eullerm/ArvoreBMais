@@ -12,13 +12,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b6bc82fa-5bff-4a03-ab74-0e7fbee43877" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/arvore_b_mais.c" beforeDir="false" afterPath="$PROJECT_DIR$/arvore_b_mais.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/C.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/arvore_b_mais.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/arvore_b_mais.c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/objects.a" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/objects.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/cardapio_pizza.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/cardapio_pizza.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_arvore_b_mais.c" beforeDir="false" afterPath="$PROJECT_DIR$/test_arvore_b_mais.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/cardapio_pizza.dir/arvore_b_mais.c.obj" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -33,12 +28,14 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/arvore_b_mais.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="328">
-              <caret line="827" column="1" lean-forward="true" selection-start-line="827" selection-start-column="1" selection-end-line="827" selection-end-column="1" />
+            <state relative-caret-position="242">
+              <caret line="851" column="11" lean-forward="true" selection-start-line="851" selection-start-column="11" selection-end-line="851" selection-end-column="11" />
               <folding>
                 <element signature="e#84#103#0" expanded="true" />
                 <element signature="e#274#653#0" />
+                <element signature="e#655#7409#0" />
                 <element signature="e#7411#11661#0" />
+                <element signature="e#11663#12748#0" />
                 <element signature="e#12750#13169#0" />
                 <element signature="e#13171#14764#0" />
                 <element signature="e#14766#16075#0" />
@@ -46,10 +43,26 @@
                 <element signature="e#16357#16899#0" />
                 <element signature="e#16901#17053#0" />
                 <element signature="e#17055#17440#0" />
+                <element signature="e#17442#19297#0" />
                 <element signature="e#19299#19970#0" />
                 <element signature="e#19972#20762#0" />
                 <element signature="e#20764#20964#0" />
+                <element signature="e#22630#26436#0" />
+                <element signature="e#26053#26745#0" />
+                <element signature="e#27491#28116#1" />
+                <element signature="e#28137#28830#1" />
+                <element signature="e#28518#28976#0" />
+                <element signature="e#29520#32867#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DIa15680.23467/test_arvore_b_mais.c">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2806">
+              <caret line="996" column="117" selection-start-line="996" selection-start-column="96" selection-end-line="996" selection-end-column="117" />
             </state>
           </provider>
         </entry>
@@ -136,8 +149,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>55</find>
-      <find>20</find>
       <find>fseek(arq_Indices, 0, SEEK_END);</find>
       <find>fseek(arq_Dados, 0, SEEK_END);</find>
       <find>BEG</find>
@@ -166,6 +177,8 @@
       <find>concatena</find>
       <find>exclui</find>
       <find>END</find>
+      <find>im</find>
+      <find>Exclusao 5</find>
     </findStrings>
     <replaceStrings>
       <replace>cria_nos_folhas(D,</replace>
@@ -208,6 +221,7 @@
         <option value="$PROJECT_DIR$/arvore_b_mais.h" />
         <option value="$PROJECT_DIR$/test_arvore_b_mais.c" />
         <option value="$PROJECT_DIR$/arvore_b_mais.c" />
+        <option value="$USER_HOME$/AppData/Local/Temp/Rar$DIa15680.23467/test_arvore_b_mais.c" />
       </list>
     </option>
   </component>
@@ -313,17 +327,39 @@
       <workItem from="1561768164524" duration="37000" />
       <workItem from="1561768632355" duration="27865000" />
       <workItem from="1561797071816" duration="1342000" />
-      <workItem from="1561863469363" duration="20094000" />
+      <workItem from="1561863469363" duration="29137000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="118513000" />
+    <option name="totallyTimeSpent" value="127556000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
     <editor active="true" />
     <layout>
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.6094527" weight="0.24281392" />
+      <window_info id="Structure" order="1" sideWeight="0.39054728" side_tool="true" weight="0.24281392" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32998884" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3824885" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.41474655" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Messages" order="7" weight="0.46850997" />
+      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="10" />
+      <window_info anchor="bottom" id="CMake" order="11" weight="0.51603055" />
+      <window_info anchor="bottom" id="Database Changes" order="12" show_stripe_button="false" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
+    </layout>
+    <layout-to-restore>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.6094527" visible="true" weight="0.24281392" />
       <window_info id="Structure" order="1" sideWeight="0.39054728" side_tool="true" visible="true" weight="0.24281392" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -344,7 +380,7 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Database" order="3" />
-    </layout>
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -359,12 +395,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/arvore_b_mais.c</url>
-          <line>770</line>
+          <line>776</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/arvore_b_mais.c</url>
-          <line>686</line>
+          <line>689</line>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>
@@ -542,14 +578,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DIa15680.23467/test_arvore_b_mais.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2806">
+          <caret line="996" column="117" selection-start-line="996" selection-start-column="96" selection-end-line="996" selection-end-column="117" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/arvore_b_mais.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="328">
-          <caret line="827" column="1" lean-forward="true" selection-start-line="827" selection-start-column="1" selection-end-line="827" selection-end-column="1" />
+        <state relative-caret-position="242">
+          <caret line="851" column="11" lean-forward="true" selection-start-line="851" selection-start-column="11" selection-end-line="851" selection-end-column="11" />
           <folding>
             <element signature="e#84#103#0" expanded="true" />
             <element signature="e#274#653#0" />
+            <element signature="e#655#7409#0" />
             <element signature="e#7411#11661#0" />
+            <element signature="e#11663#12748#0" />
             <element signature="e#12750#13169#0" />
             <element signature="e#13171#14764#0" />
             <element signature="e#14766#16075#0" />
@@ -557,9 +602,16 @@
             <element signature="e#16357#16899#0" />
             <element signature="e#16901#17053#0" />
             <element signature="e#17055#17440#0" />
+            <element signature="e#17442#19297#0" />
             <element signature="e#19299#19970#0" />
             <element signature="e#19972#20762#0" />
             <element signature="e#20764#20964#0" />
+            <element signature="e#22630#26436#0" />
+            <element signature="e#26053#26745#0" />
+            <element signature="e#27491#28116#1" />
+            <element signature="e#28137#28830#1" />
+            <element signature="e#28518#28976#0" />
+            <element signature="e#29520#32867#0" />
           </folding>
         </state>
       </provider>

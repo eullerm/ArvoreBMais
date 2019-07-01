@@ -651,7 +651,7 @@ int q_filhos(TNoInterno *pai){
     return 0;
 }
 
-void concatena(TNoFolha *no, TNoFolha *irmao, TNoInterno *pai, int d, int op, int ind_pai ,int *index, FILE *dados){
+void concatena(TNoFolha *no, TNoFolha *irmao, TNoInterno *pai, int d, int op, int *index, FILE *dados){
     if(op == DIR) {
         for (int i =0; i < irmao->m; i++){
 
@@ -666,10 +666,13 @@ void concatena(TNoFolha *no, TNoFolha *irmao, TNoInterno *pai, int d, int op, in
 
         no->pont_prox = irmao->pont_prox;
         for (int i = *index; i < pai->m; i++) {
-            if (pai->chaves[i+1] != -1) pai->chaves[i] = pai->chaves[i+1];
-            else pai->chaves[i] = -1;
 
-            pai->p[i+1] = irmao->pont_prox;
+
+            pai->chaves[i] = pai->chaves[i+1];
+            if (pai->chaves[i] != -1) //Se a nova chave for diferente de -1 ele leva o ponteiro do irmão
+                pai->p[i+1] = irmao->pont_prox;
+
+
             fseek(dados, irmao->pont_prox, SEEK_SET);
             irmao = le_no_folha(d, dados);
         }
@@ -687,8 +690,11 @@ void concatena(TNoFolha *no, TNoFolha *irmao, TNoInterno *pai, int d, int op, in
         irmao->pont_prox = no->pont_prox; //Aponta para onde o noh excluido apontava
 
         for (int i = *index; i < pai->m; i++) {
+
             pai->chaves[i] = pai->chaves[i + 1];
-            if(pai->chaves[i] != -1) pai->p[i + 1] = no->pont_prox;
+            if(pai->chaves[i] != -1)//Se a nova chave for diferente de -1 ele leva o ponteiro do irmão
+                pai->p[i + 1] = no->pont_prox;
+
             fseek(dados, no->pont_prox, SEEK_SET);
             no = le_no_folha(d, dados);
         }
@@ -768,14 +774,14 @@ int exclui(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, cha
             else{//concatena
 
                 int guardaP;
-                concatena(no, irmao, w, d, op, no->pont_pai, &guardaP, dados);
+                concatena(no, irmao, w, d, op, &guardaP, dados);
 
                 if(w->pont_pai == -1 && q_filhos(w) == 1){//vai ter q apagar esse pai
                     irmao->pont_pai = -1;
                     metadados->pont_raiz = w->p[0];//vai ser sempre essa posição (graças a deus)
                     metadados->raiz_folha = 1;
                     salva_arq_metadados(nome_arquivo_metadados, metadados);
-                    pos = w->p[0];
+
                     fseek(dados, pos, SEEK_SET);
                     salva_no_folha(d, irmao, dados);
                     fclose(dados);
@@ -783,6 +789,9 @@ int exclui(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, cha
                     libera_no_folha(d, no);
                 }
                 else if(w->m < d && w->pont_pai != -1){//vai propagar :(
+
+                    fseek(indice, w->pont_pai, SEEK_SET);
+                    TNoInterno *w2 = le_no_interno(d, indice);
 
 
                 }else{
@@ -841,14 +850,25 @@ int imprimirArvore(int d, char *nome_arquivo_dados, char *nome_arquivo_indice, c
         imprime_no_folha(d, noFolha);
         return 1;
     }else {
+        FILE *arq_Indice = fopen(nome_arquivo_indice, "rb");
+        fseek(arq_Indice, metadados->pont_raiz, SEEK_SET);
+        TNoInterno *noInterno = le_no_interno(d, arq_Indice);
+
+        while(!noInterno->aponta_folha){
+            fseek(arq_Indice, noInterno->p[0], SEEK_SET);
+            noInterno = le_no_interno(d, arq_Indice);
+        }
         FILE *arq_Dados = fopen(nome_arquivo_dados, "rb");
 
-        rewind(arq_Dados);
+        fseek(arq_Dados, noInterno->p[0] ,SEEK_SET);
+
         TNoFolha *noFolha = le_no_folha(d, arq_Dados);
         if (noFolha) {
-            while (noFolha) {
-                imprime_no_folha(d, noFolha);
+            imprime_no_folha(d, noFolha);
+            while (noFolha->pont_prox != -1) {
+                fseek(arq_Dados, noFolha->pont_prox, SEEK_SET);
                 noFolha = le_no_folha(d, arq_Dados);
+                imprime_no_folha(d, noFolha);
             }
             return 1;
         } else return 0;
@@ -957,7 +977,7 @@ void tarefa(int opt, char *nome_arquivo_metadados, char *nome_arquivo_indice, ch
 
     }else if(opt == 4){//Imprimir arvore
 
-        if(!imprimirArvore(d, nome_arquivo_dados)) printf("Sem pizzas cadastradas.\n");
+        if(!imprimirArvore(d, nome_arquivo_dados, nome_arquivo_indice, nome_arquivo_metadados)) printf("Sem pizzas cadastradas.\n");
 
     }else if(opt == 5){//Buscar pizza
 
