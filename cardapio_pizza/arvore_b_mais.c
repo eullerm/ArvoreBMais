@@ -395,8 +395,10 @@ int busca(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, char
 
     TMetadados *metadados = le_arq_metadados(nome_arquivo_metadados);
     if(metadados->raiz_folha){
-        return metadados->pont_raiz;
-
+        if(metadados->pont_raiz != -1) return metadados->pont_raiz;
+        else{
+            return metadados->pont_prox_no_folha_livre;
+        }
     }else {
         fseek(arq_Indice, metadados->pont_raiz, SEEK_SET);
 
@@ -408,7 +410,7 @@ int busca(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, char
             //Busca binaria//
             int inf = 0;
             int sup = noInterno->m - 1;
-            int meio;
+            int meio = 0;
             while (inf <= sup){
                 meio = (inf + sup)/2;
                 if (cod < noInterno->chaves[meio])
@@ -467,7 +469,10 @@ int insere(int cod, char *nome, char *categoria, float preco, char *nome_arquivo
             fseek(arq_Dados, pos, SEEK_SET);
             salva_no_folha(d, novoFolha, arq_Dados);
             libera_no_folha(d, novoFolha);
-            metadados->pont_prox_no_folha_livre = tamanho_no_folha(d);
+            fseek(arq_Dados, 0 ,SEEK_END);
+            metadados->pont_prox_no_folha_livre = ftell(arq_Dados);
+            metadados->pont_raiz = pos;
+            metadados->raiz_folha = 1;
         }
 
         salva_arq_metadados(nome_arquivo_metadados, metadados);
@@ -497,16 +502,16 @@ TNoFolha *retira_pizza(TNoFolha *no, int pos){
     return no;
 }
 
-//Redistribui o irmão da direita com o da esquerda
-void redistribui_dir(TNoFolha *dir, TNoFolha *esq, TNoInterno *pai){
-    esq->pizzas[esq->m] = dir->pizzas[0];//passei do irmao da direita pro da esquerda;
-    int cod = esq->pizzas[esq->m]->cod;
-    dir = retira_pizza(dir, 0);//retirei o valor da direita e mantive salvo em cod
-    int pos = 0;
-    int ind = 0;
-    ind = busca_binaria(pai, &pos, cod, 0, pai->m-1, 0);//achei a posição do pai que tem os filhos
-    pai->chaves[pos] = dir->pizzas[0]->cod;//atualizei o indice
-    esq->m++;
+TNoInterno *retira_interno(TNoInterno *no, int pos){
+    int i;
+    for(i = pos; i < no->m - 1; i++){
+        if(no->chaves[i+1]){
+            no->chaves[i] = no->chaves[i+1];
+        }
+    }
+    no->chaves[no->m-1] = -1;
+    no->m--;
+    return no;
 }
 
 //Move as pizzas
@@ -518,17 +523,92 @@ TNoFolha *shift(TNoFolha *no){
     return no;
 }
 
-//Redistribui o irmão da esquerda pro da direita
-void redistribui_esq(TNoFolha *dir, TNoFolha *esq, TNoInterno *pai){
-    int cod = esq->pizzas[esq->m-1]->cod;
-    dir = shift(dir);
-    dir->pizzas[0] = esq->pizzas[esq->m-1];
-    int pos = 0;
-    busca_binaria(pai, &pos, cod, 0, pai->m-1, 0);//achei a posição do pai que tem os filhos
-    pai->chaves[pos] = cod;//atualizei o indice
+//Acho que nao sera necessaria.
+TNoInterno *shift_interno(TNoInterno *pai){//faz um shift
+    //tenho q deslocar tanto os indices quanto
+    //{1,5,9}
+    //{n,(2,3,4), (6,7,8), (10,11,23)}
+    if(pai){
+        int i;
+        for(i = 0; i < pai->m; i++){
+            if(i >= pai->m-1){//pra nao dar segfault
+                pai->p[i] = pai->p[i+1];
+            }
+            else{
+                pai->chaves[i] = pai->chaves[i+1];
+                pai->p[i] = pai->p[i+1];
+            }
+        }
+        //anulo a ultima posição q tinha valor
+        int j = pai->m;
+        while(j > pai->m-2){
+            if(pai->p[j] != -1){
+                pai->p[j] = -1;
+                pai->chaves[j-1] = -1;
+                break;
+            }
+            j++;
+        }
+        pai->m--;
+        return pai;
+    }return NULL;
 }
 
-//Retorna o irmão
+TNoInterno * get_irmao_op_interno(int d,FILE *dados,TNoInterno *pai, TNoInterno *no, int pos, int *op, int *index){//retorna a posicao do irmao e a operação que será feita com ele
+    // op = -1 = redist com o irmao da direita. op = 0 = redist com o filho da esquerda. op = 1 = concatenação com o filho da direita.
+    int i = 0;
+    int p = 0;//indice dos filhos
+
+    if(pai){
+        for(i = 0; i <= pai->m; i++){
+            if(pai->p[i] == pos){
+                *index = p = i;
+                break;
+            }
+        }if(p == 0){
+            fseek(dados, pai->p[p+1], SEEK_SET);
+            TNoInterno *dir = le_no_interno(d, dados);
+            if(dir){
+                if(no->m + dir->m < 2*d){
+                    *op = 1;
+                }
+                else{
+                    *op = -1;
+                }
+            }
+            return dir;
+        }else{
+            //carrego o no da direita e da esquerda
+            TNoInterno *dir;
+            TNoInterno *esq;
+            fseek(dados, pai->p[p-1], SEEK_SET);
+            esq = le_no_interno(2, dados);
+            fseek(dados, pai->p[p+1], SEEK_SET);
+            dir = le_no_interno(2, dados);
+            //testo qual é o melhor e qual operacao
+            if(dir){
+                if(dir->m + no->m == 2*d){//redistribuição com o da direita
+                    *op = -1;
+                    return dir;
+                }else if(!esq){//concatenação
+                    *op = 1;
+                    return dir;
+                }
+            }else if(esq){
+                if(esq->m + no->m == 2*d){//redistribuição com o da esquerda
+                    *op = 0;
+                    return esq;
+                }else{
+                    *op = 2;
+                    return esq;
+                }
+            }
+        }
+    }
+    return NULL;
+}
+
+//Retorna o irmão e a operacao q tem q ser feita
 TNoFolha * get_irmao_op(int d,FILE *dados,TNoInterno *pai, TNoFolha *no, int pos, int *op, int *index){//retorna a posicao do irmao e a operação que será feita com ele
     // op = -1 = redist com o irmao da direita. op = 0 = redist com o filho da esquerda. op = 1 = concatenação com o filho da direita.
     int i = 0;
@@ -580,64 +660,61 @@ TNoFolha * get_irmao_op(int d,FILE *dados,TNoInterno *pai, TNoFolha *no, int pos
                 }
             }
         }
-    }
-    return NULL;
-}
-
-//Exclui todas pizzas de uma categoria
-void excluiCategoria(char *categoria, char *nome_arquivo_dados, char *nome_arquivo_indice, char *nome_arquivo_metadados, int d){
-
-    FILE *arq_Dados = fopen(nome_arquivo_dados, "rb");
-
-    TNoFolha *noFolha = le_no_folha(d, arq_Dados);
-
-    int i =0;
-
-    while(noFolha){
-
-        if(i < noFolha->m){
-            if(strcmp(noFolha->pizzas[i]->categoria, categoria) == 0){
-                exclui(noFolha->pizzas[i]->cod, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d);
-            }i++;
-        }else{
-            noFolha = le_no_folha(d, arq_Dados);
-            i = 0;
-        }
-    }
-    fclose(arq_Dados);
-
-}
-
-//Acho que nao sera necessaria.
-TNoInterno *shift_interno(TNoInterno *pai){//faz um shift
-    //tenho q deslocar tanto os indices quanto
-    //{1,5,9}
-    //{n,(2,3,4), (6,7,8), (10,11,23)}
-    if(pai){
-        int i;
-        for(i = 0; i < pai->m; i++){
-            if(i >= pai->m-1){//pra nao dar segfault
-                pai->p[i] = pai->p[i+1];
-            }
-            else{
-                pai->chaves[i] = pai->chaves[i+1];
-                pai->p[i] = pai->p[i+1];
-            }
-        }
-        //anulo a ultima posição q tinha valor
-        int j = pai->m;
-        while(j > pai->m-2){
-            if(pai->p[j] != -1){
-                pai->p[j] = -1;
-                pai->chaves[j-1] = -1;
-                break;
-            }
-            j++;
-        }
-        pai->m--;
-        return pai;
     }return NULL;
 }
+
+void redistribui_dir_interno(TNoInterno *dir, TNoInterno *esq, TNoInterno *pai){
+    int index = 0;
+    busca_binaria(pai, &index, esq->chaves[0], 0, pai->m-1, 0);
+    dir = shift_interno(dir);
+    dir->chaves[0] = pai->chaves[index];
+    pai->chaves[index] = esq->chaves[esq->m-1];
+    dir->p[0] = esq->p[esq->m];
+    esq->chaves[esq->m-1] = -1;
+    esq->p[esq->m] = -1;
+    esq->m--;
+    dir->m++;
+}
+void redistribui_esq_interno(TNoInterno *dir, TNoInterno *esq, TNoInterno *pai){
+    int index = 0;
+    busca_binaria(pai, &index, esq->chaves[0], 0, pai->m-1, 0);
+    esq->chaves[esq->m] = pai->chaves[index];
+    pai->chaves[index] = dir->chaves[0];
+    esq->p[esq->m+1] = dir->p[0];
+
+    int i = 0;
+    for(;i<dir->m - 1;i++){
+        dir->chaves[i] = dir->chaves[i+1];
+        dir->p[i] = dir->p[i+1];
+    }
+    dir->p[dir->m] = -1;
+    dir->chaves[dir->m-1] = -1;
+    esq->m++;
+    dir->m--;
+}
+//Redistribui o irmão da direita com o da esquerda
+void redistribui_dir(TNoFolha *dir, TNoFolha *esq, TNoInterno *pai){
+    esq->pizzas[esq->m] = dir->pizzas[0];//passei do irmao da direita pro da esquerda;
+    int cod = esq->pizzas[esq->m]->cod;
+    dir = retira_pizza(dir, 0);//retirei o valor da direita e mantive salvo em cod
+    int pos = 0;
+    int ind = 0;
+    ind = busca_binaria(pai, &pos, cod, 0, pai->m-1, 0);//achei a posição do pai que tem os filhos
+    pai->chaves[pos] = dir->pizzas[0]->cod;//atualizei o indice
+    esq->m++;
+}
+
+
+//Redistribui o irmão da esquerda pro da direita
+void redistribui_esq(TNoFolha *dir, TNoFolha *esq, TNoInterno *pai){
+    int cod = esq->pizzas[esq->m-1]->cod;
+    dir = shift(dir);
+    dir->pizzas[0] = esq->pizzas[esq->m-1];
+    int pos = 0;
+    busca_binaria(pai, &pos, cod, 0, pai->m-1, 0);//achei a posição do pai que tem os filhos
+    pai->chaves[pos] = cod;//atualizei o indice
+}
+
 
 int q_filhos(TNoInterno *pai){
     if(pai){
@@ -651,32 +728,197 @@ int q_filhos(TNoInterno *pai){
     return 0;
 }
 
-void concatena(TNoFolha *no, TNoFolha *irmao, TNoInterno *pai, int d, int op, int *index, FILE *dados){
+//Exclui todas pizzas de uma categoria
+void excluiCategoria(char *categoria, char *nome_arquivo_dados, char *nome_arquivo_indice, char *nome_arquivo_metadados, int d){
+
+    TMetadados *metadados = le_arq_metadados(nome_arquivo_metadados);
+
+    if(!metadados) return;//Caso nao tenha nada no metadados então a arvore está vazia
+
+    if(metadados->raiz_folha) {
+
+        FILE *arq_Dados = fopen(nome_arquivo_dados, "rb");
+        fseek(arq_Dados, metadados->pont_raiz, SEEK_SET);
+        TNoFolha *noFolha = le_no_folha(d, arq_Dados);
+        int i = 0;
+
+        while(i < noFolha->m) {
+            if (strcmp(noFolha->pizzas[i]->categoria, categoria) == 0) {
+                exclui(noFolha->pizzas[i]->cod, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d);
+
+            } else {
+                i++;
+            }
+            fseek(arq_Dados, metadados->pont_raiz, SEEK_SET);
+            noFolha = le_no_folha(d, arq_Dados);
+        }
+
+
+        if(noFolha->m ==0) fclose(fopen(nome_arquivo_metadados, "wb"));
+
+        fclose(arq_Dados);
+
+    }else{
+        FILE *arq_Indice = fopen(nome_arquivo_indice, "rb");
+        fseek(arq_Indice, metadados->pont_raiz, SEEK_SET);
+        TNoInterno *noInterno = le_no_interno(d, arq_Indice);
+
+        while(!noInterno->aponta_folha){
+            fseek(arq_Indice, noInterno->p[0], SEEK_SET);
+            noInterno = le_no_interno(d, arq_Indice);
+        }
+        FILE *arq_Dados = fopen(nome_arquivo_dados, "rb");
+
+        fseek(arq_Dados, noInterno->p[0] ,SEEK_SET);
+        TNoFolha *noFolha = le_no_folha(d, arq_Dados);
+        int i = 0;
+        while(noFolha) {
+            while(i < noFolha->m) {
+                if (strcmp(noFolha->pizzas[i]->categoria, categoria) == 0) {
+                    exclui(noFolha->pizzas[i]->cod, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d);
+
+                } else {
+                    i++;
+                }
+                fseek(arq_Dados, metadados->pont_raiz, SEEK_SET);
+                noFolha = le_no_folha(d, arq_Dados);
+                i = 0;
+            }
+            if(noFolha->pont_prox == -1) break;
+            fseek(arq_Dados, noFolha->pont_prox, SEEK_SET);
+
+            noFolha = le_no_folha(d, arq_Dados);
+        }
+
+        fclose(arq_Dados);
+
+    }
+
+}
+
+void concatena_interno(TNoInterno *w, TNoInterno *irmao, TNoInterno *pai, int d, int op, int index, FILE *dados, FILE *indice){
+    int p_irmao = 0;
+    if(op == DIR) {
+        busca_binaria(pai, &p_irmao, irmao->chaves[0], 0, irmao->m - 1, 0);
+        index = p_irmao - 1;
+
+        w->chaves[w->m] = pai->chaves[index];
+        w->p[w->m + 1] = irmao->p[0];
+        w->m++;
+        if(w->aponta_folha) {//Altera o ponteiro do no pai nos noh folha
+            fseek(dados, irmao->p[0], SEEK_SET);
+            TNoFolha *filho = le_no_folha(d, dados);
+            filho->pont_pai = pai->p[index];
+            fseek(dados, irmao->p[0], SEEK_SET);
+            salva_no_folha(d, filho, dados);//salva noh com o valor do pai alterado
+            for(int i = index + 1; i<= irmao->m ;i++){
+                fseek(dados, irmao->p[i], SEEK_SET);
+                filho = le_no_folha(d, dados);
+                filho->pont_pai = pai->p[index];
+                fseek(dados, irmao->p[i], SEEK_SET);
+                salva_no_folha(d, filho, dados);
+            }
+        }else{//Altera o ponteiro pro pai
+            fseek(indice, irmao->p[0], SEEK_SET);
+            TNoInterno *filho = le_no_interno(d, indice);
+            filho->pont_pai = pai->p[index];
+            fseek(dados, irmao->p[0], SEEK_SET);
+            salva_no_interno(d, filho, indice);//salva noh com o valor do pai alterado
+            for(int i = index + 1; i<= irmao->m ;i++){
+                fseek(dados, irmao->p[i], SEEK_SET);
+                filho = le_no_interno(d, indice);
+                filho->pont_pai = pai->p[index];
+                fseek(dados, irmao->p[i], SEEK_SET);
+                salva_no_interno(d, filho, indice);
+            }
+
+        }
+        for (int i = 0; i < irmao->m; i++){
+            w->chaves[w->m] = irmao->chaves[i];
+            w->p[w->m + 1] = irmao->p[i + 1];
+            w->m++;
+        }
+        for (int i = index; i < pai->m - 1; i++) {
+
+            pai->chaves[i] = pai->chaves[i + 1];
+            if(pai->chaves[i] != -1) //
+                pai->p[i + 1] = pai->p[i + 2];
+        }
+        //Garante que a ultima posição será -1
+        pai->chaves[index] = -1;
+        pai->p[pai->m] = -1;
+        pai->m--;
+
+    }else if(op == ESQ){
+        busca_binaria(pai, &p_irmao, irmao->chaves[0], 0, pai->m, 0);
+        index = p_irmao;
+
+        irmao = shift_interno(irmao);
+        irmao->chaves[0] = pai->chaves[index];
+        irmao->p[0] = w->p[w->m];
+        irmao->m++;
+        if(irmao->aponta_folha) {
+            fseek(dados, w->p[w->m], SEEK_SET);
+            TNoFolha *filho = le_no_folha(d, dados);
+            filho->pont_pai = pai->p[index];
+            salva_no_folha(d, filho, dados);
+            for(int i = index + 1; i< irmao->m ;i++){
+                fseek(dados, w->p[i], SEEK_SET);
+                filho = le_no_folha(d, dados);
+                filho->pont_pai = pai->p[index];
+                salva_no_folha(d, filho, dados);
+            }
+
+        }else{
+
+        }
+
+        for (int i =0; i < w->m; i++) {
+
+            irmao->chaves[irmao->m] = w->chaves[i];
+            irmao->p[irmao->m + 1] = w->p[i + 1];
+            irmao->m++;
+        }
+
+        for (int i = index; i < pai->m; i++) {
+            pai->chaves[i] = pai->chaves[i + 1];
+            if(pai->chaves[i] != -1)
+                pai->p[i + 1] = pai->p[i + 2];
+        }
+
+        //Garante que a ultima posição será -1
+        if(pai->m == 2*d) pai->chaves[pai->m - 1] = -1;
+        pai->p[pai->m] = -1;
+        pai->m--;
+
+    }
+
+}
+
+void concatena(TNoFolha *no, TNoFolha *irmao, TNoInterno *pai, int d, int op, int ind_pai ,int *index, FILE *dados){
     if(op == DIR) {
         for (int i =0; i < irmao->m; i++){
-
             no->pizzas[no->m] = irmao->pizzas[i];
             no->m++;
         }
 
-        *index = 0; //Para descobrir qual index do pai vai ser apagado
-        for(int i = 1; pai->p[i] != no->pont_prox; i++ ) (*index)++;
-
-
-
+        //*index = 0; //Para descobrir qual index do pai vai ser apagado
+        //for(int i = 1; pai->p[i] != no->pont_prox; i++ ) (*index)++;
+        busca_binaria(pai, index, irmao->pizzas[0]->cod, 0, irmao->m -1, 0);
         no->pont_prox = irmao->pont_prox;
         for (int i = *index; i < pai->m; i++) {
 
-
-            pai->chaves[i] = pai->chaves[i+1];
-            if (pai->chaves[i] != -1) //Se a nova chave for diferente de -1 ele leva o ponteiro do irmão
-                pai->p[i+1] = irmao->pont_prox;
-
-
+            pai->chaves[i] = pai->chaves[i + 1];
+            if(pai->chaves[i] != -1) // Se a nova chave for diferente de -1 ele leva o ponteiro do irmao
+                pai->p[i + 1] = irmao->pont_prox;
             fseek(dados, irmao->pont_prox, SEEK_SET);
             irmao = le_no_folha(d, dados);
         }
+        //Garante que a ultima posição será -1
+        if(pai->m == 2*d) pai->chaves[pai->m - 1] = -1;
+        pai->p[pai->m] = -1;
         pai->m--;
+
     }else if(op == ESQ){
         for (int i =0; i < no->m; i++) {
 
@@ -684,28 +926,92 @@ void concatena(TNoFolha *no, TNoFolha *irmao, TNoInterno *pai, int d, int op, in
             irmao->m++;
         }
 
-        *index = 0; //Para descobrir qual index do pai vai ser apagado
-        for(int i = 1; pai->p[i] != irmao->pont_prox; i++ ) (*index)++;
+        //*index = 0; //Para descobrir qual index do pai vai ser apagado
+        //for(int i = 1; pai->p[i] != irmao->pont_prox; i++ ) (*index)++;
+        busca_binaria(pai, index, irmao->pizzas[0]->cod, 0, irmao->m -1, 0);
 
         irmao->pont_prox = no->pont_prox; //Aponta para onde o noh excluido apontava
 
         for (int i = *index; i < pai->m; i++) {
-
             pai->chaves[i] = pai->chaves[i + 1];
-            if(pai->chaves[i] != -1)//Se a nova chave for diferente de -1 ele leva o ponteiro do irmão
+            if(pai->chaves[i] != -1)// Se a nova chave for diferente de -1 ele leva o ponteiro do irmao
                 pai->p[i + 1] = no->pont_prox;
-
             fseek(dados, no->pont_prox, SEEK_SET);
             no = le_no_folha(d, dados);
         }
 
-        imprime_no_folha(d, irmao);
-
+        //Garante que a ultima posição será -1
+        if(pai->m == 2*d) pai->chaves[pai->m - 1] = -1;
         pai->p[pai->m] = -1;
-
         pai->m--;
 
-        imprime_no_interno(d, pai);
+    }
+}
+
+void exclui_interno(int d, FILE *indice, TNoInterno *w, TNoInterno *pai, TNoInterno *irmao, int op, int index, char *nome_arquivo_metadados, FILE *dados){
+
+    if(op == -1){//redistribui com o da direita
+        redistribui_dir_interno(irmao, w, pai);
+
+        fseek(indice, pai->p[index], SEEK_SET);//vou gravar o noh p
+        salva_no_interno(d, w, indice);
+        fseek(indice, pai->p[index + 1], SEEK_SET);
+        salva_no_interno(d, irmao, indice);
+        fseek(indice, w->pont_pai, SEEK_SET);
+        salva_no_interno(d, w, indice);
+
+    }
+    else if(op == 0){//redistribui com o da esquerda
+        redistribui_esq_interno(irmao, w, pai);
+
+        fseek(indice, pai->p[index], SEEK_SET);//vou gravar o noh p
+        salva_no_interno(d, w, indice);
+        fseek(indice, pai->p[index + 1], SEEK_SET);
+        salva_no_interno(d, irmao, indice);
+        fseek(indice, w->pont_pai, SEEK_SET);
+        salva_no_interno(d, w, indice);
+
+
+    }else{//concatena
+
+        concatena_interno(w, irmao, pai, d, op, index, dados, indice);
+
+        if(pai->pont_pai == -1 && q_filhos(pai) == 1){//vai ter q apagar esse pai
+
+            TMetadados *metadados = le_arq_metadados(nome_arquivo_metadados);
+
+            irmao->pont_pai = -1;
+            w->pont_pai = -1;
+            metadados->pont_raiz = pai->p[0];//vai ser sempre essa posição (graças a deus)
+            salva_arq_metadados(nome_arquivo_metadados, metadados);
+            fseek(indice, pai->p[0], SEEK_SET);
+            if(op == DIR)
+                salva_no_interno(d, w, indice);
+            else if (op == ESQ)
+                salva_no_interno(d, irmao, indice);
+
+        }else if(pai->m < d && pai->pont_pai != -1){//vai propagar. pode ser redistribuição de noh interno ou
+            int i;//Acha o indice
+            fseek(indice, pai->pont_pai, SEEK_SET);
+            TNoInterno *p = le_no_interno(d, indice);
+            TNoInterno *irmao_interno = get_irmao_op_interno(d, indice, p, pai, w->pont_pai, &op, &i);
+            exclui_interno(d, indice, pai, p, irmao_interno, op, i, nome_arquivo_metadados, dados);
+            fseek(indice, pai->p[index], SEEK_SET);
+
+        }else{
+            //salvo na posicao q o pai já estava
+            fseek(indice, irmao->pont_pai, SEEK_SET);
+            salva_no_interno(d, pai, indice);
+            fseek(indice, pai->p[index], SEEK_SET);
+
+            if(op == DIR)
+                salva_no_interno(d, w, indice);
+            else if (op == ESQ)
+                salva_no_interno(d, irmao, indice);
+
+        }
+
+
     }
 }
 
@@ -724,7 +1030,25 @@ int exclui(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, cha
         int p = 0;
         busca_binaria(no, &p, cod, 0, no->m, 1);
 
-        if(no->m > d || no->pont_pai == -1){//nao tem concatenacao nem redistribuicao
+        if(no->m == 1){
+
+            no = retira_pizza(no, p);
+
+            fseek(dados, pos, SEEK_SET);
+            salva_no_folha(d, no, dados);
+
+            libera_no_folha(d, no);
+
+            metadados->pont_raiz = -1;
+            fseek(dados, 0, SEEK_END);
+            metadados->pont_prox_no_folha_livre = ftell(dados);
+            fseek(indice, 0, SEEK_END);
+            metadados->pont_prox_no_interno_livre = ftell(indice);
+            salva_arq_metadados(nome_arquivo_metadados, metadados);
+            fclose(indice);
+            fclose(dados);
+
+        }else if(no->m > d || no->pont_pai == -1){//nao tem concatenacao nem redistribuicao
 
             no = retira_pizza(no, p);
 
@@ -754,7 +1078,6 @@ int exclui(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, cha
                 fseek(indice, no->pont_pai, SEEK_SET);
                 salva_no_interno(d, w, indice);
                 fclose(indice);
-
                 fclose(dados);
             }
             else if(op == 0){
@@ -770,35 +1093,47 @@ int exclui(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, cha
 
                 fclose(dados);
 
-            }
-            else{//concatena
+            }else{//concatena
 
                 int guardaP;
-                concatena(no, irmao, w, d, op, &guardaP, dados);
+                concatena(no, irmao, w, d, op, no->pont_pai, &guardaP, dados);
 
                 if(w->pont_pai == -1 && q_filhos(w) == 1){//vai ter q apagar esse pai
+
                     irmao->pont_pai = -1;
                     metadados->pont_raiz = w->p[0];//vai ser sempre essa posição (graças a deus)
                     metadados->raiz_folha = 1;
                     salva_arq_metadados(nome_arquivo_metadados, metadados);
-
+                    pos = w->p[0];
                     fseek(dados, pos, SEEK_SET);
                     salva_no_folha(d, irmao, dados);
                     fclose(dados);
                     libera_no_interno(w);
                     libera_no_folha(d, no);
-                }
-                else if(w->m < d && w->pont_pai != -1){//vai propagar :(
 
+                }else if(w->m < d && w->pont_pai != -1){//vai propagar. pode ser redistribuição de noh interno ou
                     fseek(indice, w->pont_pai, SEEK_SET);
-                    TNoInterno *w2 = le_no_interno(d, indice);
+                    TNoInterno *pai = le_no_interno(d, indice);
+                    TNoInterno *irmao_interno = get_irmao_op_interno(d, indice, pai, w, no->pont_pai, &op, &index);
+                    exclui_interno(d, indice, w, pai, irmao_interno, op, index, nome_arquivo_metadados, dados);
 
+                    fseek(dados, w->p[guardaP], SEEK_SET);
 
-                }else{
+                    if(op == DIR)
+                        salva_no_folha(d, no, dados);
+                    else if (op == ESQ)
+                        salva_no_folha(d, irmao, dados);
+
+                    fclose(indice);
+                    fclose(dados);
+
+                }else{//salvo na posicao q o pai já estava
 
                     fseek(indice, irmao->pont_pai, SEEK_SET);
                     salva_no_interno(d, w, indice);
+
                     fseek(dados, w->p[guardaP], SEEK_SET);
+
                     if(op == DIR)
                         salva_no_folha(d, no, dados);
                     else if (op == ESQ)
@@ -808,6 +1143,7 @@ int exclui(int cod, char *nome_arquivo_metadados, char *nome_arquivo_indice, cha
                     fclose(dados);
 
                 }
+
             }
         }
         return pos;
@@ -841,16 +1177,22 @@ int imprimirArvore(int d, char *nome_arquivo_dados, char *nome_arquivo_indice, c
 
     TMetadados *metadados = le_arq_metadados(nome_arquivo_metadados);
 
-    if(!metadados) return 0;//Caso nao tenha nada no metadados então a arvore está vazia
+    if (!metadados) return 0;//Caso nao tenha nada no metadados então a arvore está vazia
 
+
+    if (metadados->pont_raiz == -1){
+        return 0;
+    }
     if(metadados->raiz_folha){
+
         FILE *arq_Dados = fopen(nome_arquivo_dados, "rb");
-        rewind(arq_Dados);
+        fseek(arq_Dados, metadados->pont_raiz, SEEK_SET);
         TNoFolha *noFolha = le_no_folha(d, arq_Dados);
         imprime_no_folha(d, noFolha);
         return 1;
     }else {
         FILE *arq_Indice = fopen(nome_arquivo_indice, "rb");
+
         fseek(arq_Indice, metadados->pont_raiz, SEEK_SET);
         TNoInterno *noInterno = le_no_interno(d, arq_Indice);
 
@@ -950,13 +1292,13 @@ void tarefa(int opt, char *nome_arquivo_metadados, char *nome_arquivo_indice, ch
         printf("\nInformacoes da pizza:\n");
         printf("Codigo:\n");
         scanf("%d", &cod);
-        //printf("Nome\n");
-        //scanf(" %[^\n]", nome);
-        //printf("Categoria\n");
-        //scanf(" %[^\n]", categoria);
-        //printf("Preço\n");
-        //scanf("%f", &preco);
-        if(insere(cod, "nome", "categoria", 2, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d) != -1){
+        printf("Nome\n");
+        scanf(" %[^\n]", nome);
+        printf("Categoria\n");
+        scanf(" %[^\n]", categoria);
+        printf("Preço\n");
+        scanf("%f", &preco);
+        if(insere(cod, nome, categoria, preco, nome_arquivo_metadados, nome_arquivo_indice, nome_arquivo_dados, d) != -1){
             printf("Inserido com Sucesso\n");
         }else printf("Codigo ja exitente\n");
 
@@ -977,7 +1319,7 @@ void tarefa(int opt, char *nome_arquivo_metadados, char *nome_arquivo_indice, ch
 
     }else if(opt == 4){//Imprimir arvore
 
-        if(!imprimirArvore(d, nome_arquivo_dados, nome_arquivo_indice, nome_arquivo_metadados)) printf("Sem pizzas cadastradas.\n");
+        if(!imprimirArvore(d, nome_arquivo_dados,nome_arquivo_indice, nome_arquivo_metadados)) printf("Sem pizzas cadastradas.\n");
 
     }else if(opt == 5){//Buscar pizza
 
@@ -1046,17 +1388,17 @@ int main(){
 
     int opt;
     int d;
-    char nome_arquivo_metadados[20] = "metadados.dat";
-    char nome_arquivo_indice[20] = "indice.dat";
-    char nome_arquivo_dados[20] = "pizzas.dat";
+    char nome_arquivo_metadados[20];// = "metadados.dat";
+    char nome_arquivo_indice[20];// = "indice.dat";
+    char nome_arquivo_dados[20];// = "pizzas.dat";
     printf("Digite a ordem da arvore.\n");
     scanf(" %d", &d);
-    //printf("Nome do arquivo de metadados(com .txt ou .dat).\n");
-    //scanf(" %s", nome_arquivo_metadados);
-    //printf("Nome do arquivo de indice(com .txt ou .dat).\n");
-    //scanf(" %s", nome_arquivo_indice);
-    //printf("Nome do arquivo de dados(com .txt ou .dat).\n");
-    //scanf(" %s", nome_arquivo_dados);
+    printf("Nome do arquivo de metadados(com .txt ou .dat).\n");
+    scanf(" %s", nome_arquivo_metadados);
+    printf("Nome do arquivo de indice(com .txt ou .dat).\n");
+    scanf(" %s", nome_arquivo_indice);
+    printf("Nome do arquivo de dados(com .txt ou .dat).\n");
+    scanf(" %s", nome_arquivo_dados);
 
     int flag;
     printf("\nDigite 1 caso deseje apagar o conteudo existente nesses arquivos e 0 se desejar manter.\n");
